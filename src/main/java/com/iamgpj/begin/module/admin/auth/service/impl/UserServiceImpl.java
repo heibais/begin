@@ -7,6 +7,7 @@ import com.iamgpj.begin.core.util.ToolUtils;
 import com.iamgpj.begin.module.admin.auth.dao.RoleUserDAO;
 import com.iamgpj.begin.module.admin.auth.dao.UserDAO;
 import com.iamgpj.begin.module.admin.auth.dto.UserDTO;
+import com.iamgpj.begin.module.admin.auth.param.UpdatePwdParam;
 import com.iamgpj.begin.module.admin.auth.param.UserSearchParam;
 import com.iamgpj.begin.module.admin.auth.entity.RoleUser;
 import com.iamgpj.begin.module.admin.auth.entity.User;
@@ -199,11 +200,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePassword(Integer userId, String oldPassword, String password) {
-        if (!StringUtils.hasText(password)) {
-            throw new BeginException(ExceptionEnum.PASSWORD_NULL);
-        }
-        if (password.equals(oldPassword)) {
+    public void updatePassword(Integer userId, UpdatePwdParam param) {
+        if (param.getNewPassword().equals(param.getOldPassword())) {
             return;
         }
         // 查询用户
@@ -213,13 +211,13 @@ public class UserServiceImpl implements UserService {
             if (user.getStatus() == 0) {
                 throw new BeginException(ExceptionEnum.USER_LOCKED);
             }
-            String md5Password = ShiroUtils.md5(oldPassword, user.getSalt());
+            String md5Password = ShiroUtils.md5(param.getOldPassword(), user.getSalt());
             if (!md5Password.equals(user.getPassword())) {
                 throw new BeginException(ExceptionEnum.PASSWORD_ERROE);
             }
             // 更新密码
             user.setSalt(ShiroUtils.getRandomSalt());
-            user.setPassword(ShiroUtils.md5(password, user.getSalt()));
+            user.setPassword(ShiroUtils.md5(param.getNewPassword(), user.getSalt()));
             userDAO.save(user);
         } else {
             throw new BeginException(ExceptionEnum.REQUEST_ERROR);

@@ -2,6 +2,10 @@ package com.iamgpj.begin.module.admin.auth.controller;
 
 import com.iamgpj.begin.core.common.RespJson;
 import com.iamgpj.begin.core.exception.BeginException;
+import com.iamgpj.begin.core.shiro.subject.UserPrincipal;
+import com.iamgpj.begin.core.util.ShiroUtils;
+import com.iamgpj.begin.module.admin.auth.param.UpdatePwdParam;
+import com.iamgpj.begin.module.admin.auth.param.UserRoleParam;
 import com.iamgpj.begin.module.admin.auth.param.UserSearchParam;
 import com.iamgpj.begin.module.admin.auth.entity.User;
 import com.iamgpj.begin.module.admin.auth.param.UserParam;
@@ -38,14 +42,13 @@ public class UserController {
     }
 
     @ApiOperation(value = "获取当前用户（已实现）", notes = "查询用户", tags = {"auth", "auth-user"})
-    @GetMapping("/currentUser")
+    @GetMapping("/current-user")
     public RespJson findCurrentUser() {
-        Subject subject = SecurityUtils.getSubject();
-        if (subject.isAuthenticated() || subject.isRemembered()) {
-            User user = (User) subject.getPrincipal();
-            return RespJson.createSuccess(user);
+        UserPrincipal principal = ShiroUtils.getUserPrincipal();
+        if (principal == null) {
+            return RespJson.createError("用户未登录");
         }
-        return RespJson.createError("用户未登录");
+        return RespJson.createSuccess(principal);
     }
 
 
@@ -67,11 +70,14 @@ public class UserController {
     }
 
     @ApiOperation(value = "更新用户密码（已实现）", notes = "更新用户密码", tags = {"auth", "auth-user"})
-    @PostMapping("/{userId:\\d+}/change-pwd")
-    public RespJson updatePassword(@PathVariable("userId") Integer userId,
-                                   @RequestParam("oldPassword") String oldPassword,
-                                   @RequestParam("password") String password) {
-        userService.updatePassword(userId, oldPassword, password);
+    @PostMapping("/{id:\\d+}/change-pwd")
+    public RespJson updatePassword(@PathVariable("id") Integer userId,
+                                   @Validated @RequestBody UpdatePwdParam param,
+                                   BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new BeginException(bindingResult.getFieldError().getDefaultMessage());
+        }
+        userService.updatePassword(userId, param);
         return RespJson.createSuccess("更新成功");
     }
 
@@ -91,8 +97,13 @@ public class UserController {
 
     @ApiOperation(value = "保存用户角色（已实现）", notes = "保存用户角色", tags = {"auth", "auth-user"})
     @PostMapping("/{id:\\d+}/save-role")
-    public RespJson saveUserRole(@PathVariable("id") Integer userId, String roleIds) {
-        userService.saveUserRole(userId, roleIds);
+    public RespJson saveUserRole(@PathVariable("id") Integer userId,
+                                 @Validated @RequestBody UserRoleParam param,
+                                 BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new BeginException(bindingResult.getFieldError().getDefaultMessage());
+        }
+        userService.saveUserRole(userId, param.getRoleIds());
         return RespJson.createSuccess("保存成功");
     }
 }

@@ -1,5 +1,6 @@
 package com.iamgpj.begin.core.util;
 
+import com.iamgpj.begin.core.shiro.subject.UserPrincipal;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
@@ -49,5 +50,34 @@ public class ShiroUtils {
      */
     public static Subject getSubject() {
         return SecurityUtils.getSubject();
+    }
+
+    /**
+     * 获取当前用户信息
+     * @return
+     */
+    public static UserPrincipal getUserPrincipal() {
+        Object principal = getSubject().getPrincipal();
+        if (principal == null) {
+            return null;
+        }
+        return (UserPrincipal) principal;
+    }
+
+    /**
+     * 获取当前用户id
+     * @return
+     */
+    public static Integer getCurrentUserId() {
+        UserPrincipal userPrincipal = getUserPrincipal();
+        return userPrincipal == null ? 0: userPrincipal.getId();
+    }
+
+    /**
+     * 是否是超级管理员
+     * @return
+     */
+    public static boolean isAdmin() {
+        return getCurrentUserId().equals(0);
     }
 }

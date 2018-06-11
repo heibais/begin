@@ -28,7 +28,7 @@ spring:
 
 
 
-## 第三方平台
+##
 thirdparty-platform:
   qq:
     appId: 101422018

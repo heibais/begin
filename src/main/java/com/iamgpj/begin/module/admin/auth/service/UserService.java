@@ -1,6 +1,7 @@
 package com.iamgpj.begin.module.admin.auth.service;
 
 import com.iamgpj.begin.module.admin.auth.dto.UserDTO;
+import com.iamgpj.begin.module.admin.auth.param.UpdatePwdParam;
 import com.iamgpj.begin.module.admin.auth.param.UserSearchParam;
 import com.iamgpj.begin.module.admin.auth.entity.User;
 import com.iamgpj.begin.module.admin.auth.param.UserParam;
@@ -89,8 +90,6 @@ public interface UserService {
     /**
      * 更新用户密码
      * @param userId 用户id
-     * @param oldPassword 旧密码
-     * @param password 新密码
      */
-    void updatePassword(Integer userId, String oldPassword, String password);
+    void updatePassword(Integer userId, UpdatePwdParam param);
 }

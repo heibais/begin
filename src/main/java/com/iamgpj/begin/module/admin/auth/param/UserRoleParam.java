@@ -14,10 +14,6 @@ import javax.validation.constraints.NotNull;
 @Data
 public class UserRoleParam {
 
-    @ApiModelProperty(value = "用户id")
-    @NotNull(message = "用户id不能为空")
-    private Integer userId;
-
     @ApiModelProperty(value = "角色")
     @NotEmpty(message = "角色不能为空")
     private String roleIds;
