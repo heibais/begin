@@ -34,6 +34,11 @@ thirdparty-platform:
     appId: 101422018
     appSecret: 9974d4424ccc4655169407638dd570d0
     redirectUrl: http://iamgpj.com/callback
+  qiniu:
+    accessKey: GC5dpNSW3TGtvfMJzyPfKJw8HkcbDg_W4G6EjTdg
+    secretKey: 8618BkgP8KJ2HvUIEI4D-YzSDcbd6AEBLILPmwIs
+    imgDomain: img.iamgpj.com
+    fileDomain: file.iamgpj.com
 
 
 

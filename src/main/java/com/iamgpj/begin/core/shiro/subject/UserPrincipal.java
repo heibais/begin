@@ -19,6 +19,10 @@ public class UserPrincipal implements Serializable {
     private Integer id;
     /** 登录用户名 */
     private String username;
+    /** 昵称 */
+    private String nickname;
+    /** 头像 */
+    private String avatar;
     /** 登录方式 */
     private String loginType;
 

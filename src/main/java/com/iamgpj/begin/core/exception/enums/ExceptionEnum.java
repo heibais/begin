@@ -18,6 +18,11 @@ public enum ExceptionEnum implements ServiceExceptionEnum {
     USER_LOCKED(7, "用户已被禁用"),
 
     /**
+     * 文件
+     */
+    FILE_UPLOAD_FAIL(11, "上传文件失败"),
+
+    /**
      * 错误的请求
      */
     REQUEST_ERROR(400, "请求有错误"),

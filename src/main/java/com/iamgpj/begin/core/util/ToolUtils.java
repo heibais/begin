@@ -37,6 +37,21 @@ public class ToolUtils {
     }
 
     /**
+     * 获取随机位数的数字
+     *
+     * @author GPJ
+     * @Date 2017/8/24 14:09
+     */
+    public static String getRandomNum(int length) {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<length; i++) {
+            sb.append(random.nextInt(10));
+        }
+        return sb.toString();
+    }
+
+    /**
      * 对象属性复制
      * @param source 源数据
      * @param clazz 目标类
