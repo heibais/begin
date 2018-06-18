@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * @Description: 高频方法集合类
@@ -67,6 +68,18 @@ public class ToolUtils {
             log.error("【对象转换】 信息={}", e);
             throw new BeginException(ExceptionEnum.SERVER_ERROR);
         }
+    }
+
+    /**
+     * 对象属性复制
+     * @param source 源数据
+     * @param clazz 目标类
+     */
+    public static <T> List<T> mapList(List<?> source, Class<T> clazz) {
+        if (CollectionUtils.isEmpty(source)) {
+            return new ArrayList<>();
+        }
+        return source.stream().map(item -> map(item, clazz)).collect(Collectors.toList());
     }
 
     /**
