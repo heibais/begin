@@ -2,7 +2,6 @@ package com.iamgpj.begin.module.shop.goods.category.controller;
 
 import com.iamgpj.begin.core.common.RespJson;
 import com.iamgpj.begin.core.exception.BeginException;
-import com.iamgpj.begin.module.admin.auth.param.DeptParam;
 import com.iamgpj.begin.module.shop.goods.category.dto.CategoryDTO;
 import com.iamgpj.begin.module.shop.goods.category.param.CategoryParam;
 import com.iamgpj.begin.module.shop.goods.category.service.CategoryService;
@@ -19,16 +18,17 @@ import java.util.List;
  * @author: gpj
  * @Create: 2018/6/18 22:24
  */
-@RestController("/v1/shop/category")
+@RestController
+@RequestMapping("/v1/shop")
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
 
     @ApiOperation(value = "查询部门列表树状结构（已实现）", notes = "商品分类列表", tags = {"shop", "shop-category"})
-    @GetMapping
-    public RespJson list() {
-        List<CategoryDTO> dtoList = categoryService.list();
+    @GetMapping("/{userId:\\d+}/category")
+    public RespJson list(@PathVariable Integer userId) {
+        List<CategoryDTO> dtoList = categoryService.list(userId);
         return RespJson.createSuccess(dtoList);
     }
 

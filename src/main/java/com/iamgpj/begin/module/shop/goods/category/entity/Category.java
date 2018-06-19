@@ -1,8 +1,8 @@
 package com.iamgpj.begin.module.shop.goods.category.entity;
 
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.iamgpj.begin.core.biz.mybatisPlus.SuperEntity;
 import lombok.Data;
-
-import javax.persistence.*;
 
 /**
  * @Description: 商品分类
@@ -10,13 +10,9 @@ import javax.persistence.*;
  * @Create: 2018/6/18 17:56
  */
 @Data
-@Entity
-@Table(name = "bg_shop_category")
-public class Category {
+@TableName(value = "bg_shop_category")
+public class Category extends SuperEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
     /** 父id */
     private Integer pid;
     /** 用户id */

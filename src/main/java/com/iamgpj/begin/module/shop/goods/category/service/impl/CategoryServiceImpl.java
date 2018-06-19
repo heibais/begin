@@ -1,5 +1,8 @@
 package com.iamgpj.begin.module.shop.goods.category.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.core.exception.enums.ExceptionEnum;
 import com.iamgpj.begin.core.util.ToolUtils;
@@ -9,12 +12,9 @@ import com.iamgpj.begin.module.shop.goods.category.entity.Category;
 import com.iamgpj.begin.module.shop.goods.category.param.CategoryParam;
 import com.iamgpj.begin.module.shop.goods.category.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,15 +24,12 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class CategoryServiceImpl implements CategoryService {
-
-    @Autowired
-    private CategoryDAO categoryDAO;
+public class CategoryServiceImpl extends ServiceImpl<CategoryDAO, Category> implements CategoryService {
 
     @Override
     public List<CategoryDTO> list(Integer userId) {
         // 查询条件
-        List<Category> categoryList = categoryDAO.findAll(new Sort(Sort.Direction.ASC, "sort"));
+        List<Category> categoryList = baseMapper.selectList(new EntityWrapper<Category>().eq("user_id", userId).orderAsc(Arrays.asList("sort")));
         return ToolUtils.mapList(categoryList, CategoryDTO.class);
     }
 
@@ -43,7 +40,11 @@ public class CategoryServiceImpl implements CategoryService {
             throw new BeginException(ExceptionEnum.DATA_EXISTED);
         }
         Category category = ToolUtils.map(param, Category.class);
-        categoryDAO.save(category);
+        if (category.getId() == null) {
+            baseMapper.insert(category);
+        } else {
+            baseMapper.updateById(category);
+        }
     }
 
     /**
@@ -54,24 +55,29 @@ public class CategoryServiceImpl implements CategoryService {
      * @return
      */
     private boolean checkExist(Integer id, String name, Integer userId) {
-        if (id == null) {
-            return categoryDAO.countByNameAndUserId(name, userId) > 0;
-        } else {
-            return categoryDAO.countByIdNotAndNameAndUserId(id, name, userId) > 0;
+        Wrapper<Category> wrapper = new EntityWrapper<Category>().eq("name", name).eq("user_id", userId);
+        if (id != null) {
+            wrapper.ne("id", id);
         }
+        return baseMapper.selectCount(wrapper) > 0;
     }
 
     @Override
     public void delete(Integer id) {
-        if (categoryDAO.countByPid(id) > 0) {
+        if (baseMapper.selectCount(new EntityWrapper<Category>().eq("pid", id)) > 0) {
             throw new BeginException(ExceptionEnum.EXIST_CHILDREN);
         }
         // 判断是否存在子栏目
-        categoryDAO.deleteById(id);
+        baseMapper.deleteById(id);
     }
 
     @Override
     public void changeStatus(Integer id) {
-        categoryDAO.changeStatus(id);
+        Category category = baseMapper.selectById(id);
+        if (category == null) {
+            throw new BeginException(ExceptionEnum.SERVER_ERROR);
+        }
+        category.setStatus(category.getStatus() * -1 + 1);
+        baseMapper.updateById(category);
     }
 }

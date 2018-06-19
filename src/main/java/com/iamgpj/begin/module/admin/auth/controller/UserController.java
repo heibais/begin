@@ -1,19 +1,16 @@
 package com.iamgpj.begin.module.admin.auth.controller;
 
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.iamgpj.begin.core.common.RespJson;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.core.shiro.subject.UserPrincipal;
 import com.iamgpj.begin.core.util.ShiroUtils;
 import com.iamgpj.begin.module.admin.auth.param.UpdatePwdParam;
+import com.iamgpj.begin.module.admin.auth.param.UserParam;
 import com.iamgpj.begin.module.admin.auth.param.UserRoleParam;
 import com.iamgpj.begin.module.admin.auth.param.UserSearchParam;
-import com.iamgpj.begin.module.admin.auth.entity.User;
-import com.iamgpj.begin.module.admin.auth.param.UserParam;
 import com.iamgpj.begin.module.admin.auth.service.UserService;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -37,7 +34,7 @@ public class UserController {
 
     @ApiOperation(value = "查询用户列表（已实现）", notes = "查询用户列表", tags = {"auth", "auth-user"})
     @GetMapping
-    public RespJson list(@PageableDefault Pageable pageable, UserSearchParam search) {
+    public RespJson list(@PageableDefault Pagination pageable, UserSearchParam search) {
         return RespJson.createSuccess(userService.findAll(pageable, search));
     }
 

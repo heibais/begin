@@ -4,6 +4,7 @@ package com.iamgpj.begin.module.admin.auth.service;
 import com.iamgpj.begin.module.admin.auth.dto.PermissionDTO;
 import com.iamgpj.begin.module.admin.auth.dto.TreeDTO;
 import com.iamgpj.begin.module.admin.auth.entity.Permission;
+import com.iamgpj.begin.module.admin.auth.entity.RolePermission;
 import com.iamgpj.begin.module.admin.auth.param.PermissionParam;
 
 import java.util.List;
@@ -71,8 +72,14 @@ public interface PermissionService {
     List<Permission> findAllByUserId(Integer userId);
 
     /**
-     *
+     * 通过角色id删除权限
      * @param roleId
      */
-    void deletePermissionAllByRoleId(Integer roleId);
+    Boolean deletePermissionByRoleId(Integer roleId);
+
+    /**
+     * 批量新增角色权限
+     * @param list
+     */
+    Boolean batchInsertRolePermission(List<RolePermission> list);
 }

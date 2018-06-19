@@ -2,6 +2,7 @@ package com.iamgpj.begin.module.admin.auth.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.core.exception.enums.ExceptionEnum;
 import com.iamgpj.begin.core.util.ToolUtils;
@@ -16,7 +17,9 @@ import com.iamgpj.begin.module.admin.auth.entity.Role;
 import com.iamgpj.begin.module.admin.auth.entity.RolePermission;
 import com.iamgpj.begin.module.admin.auth.param.PermissionParam;
 import com.iamgpj.begin.module.admin.auth.service.PermissionService;
+import com.iamgpj.begin.module.admin.auth.service.RolePermissionService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -33,17 +36,14 @@ import java.util.stream.Collectors;
  * @Create: 2018/4/24 20:26
  */
 @Service("permissionService")
-public class PermissionServiceImpl implements PermissionService {
+public class PermissionServiceImpl extends ServiceImpl<PermissionDAO, Permission> implements PermissionService {
 
-    @Resource
-    private PermissionDAO permissionDAO;
-    @Resource
-    private RolePermissionDAO rolePermissionDAO;
-
+    @Autowired
+    private RolePermissionService rolePermissionService;
 
     @Override
     public List<PermissionDTO> findAllTree() {
-        List<Permission> list = permissionDAO.selectList(new EntityWrapper<Permission>().orderAsc(Arrays.asList("sort")));
+        List<Permission> list = baseMapper.selectList(new EntityWrapper<Permission>().orderAsc(Arrays.asList("sort")));
         List<PermissionDTO> ruleDTOList = list.stream().map(permission -> ToolUtils.map(permission, PermissionDTO.class)).collect(Collectors.toList());
         return ToolUtils.list2Tree(ruleDTOList);
     }
@@ -53,7 +53,7 @@ public class PermissionServiceImpl implements PermissionService {
         if (id != null) {
             wrapper.ne("id", id);
         }
-        return permissionDAO.selectCount(wrapper) > 0;
+        return baseMapper.selectCount(wrapper) > 0;
     }
 
     @Override
@@ -65,34 +65,34 @@ public class PermissionServiceImpl implements PermissionService {
         // 拼装对象
         Permission permission = ToolUtils.map(param, Permission.class);
         if (permission.getId() == null) {
-            permissionDAO.insert(permission);
+            baseMapper.insert(permission);
         } else {
-            permissionDAO.updateById(permission);
+            baseMapper.updateById(permission);
         }
     }
 
     @Override
     public void removeById(Integer id) {
         // 判断是否存在子栏目
-        if (permissionDAO.selectCount(new EntityWrapper<Permission>().eq("pid", id)) > 0) {
+        if (baseMapper.selectCount(new EntityWrapper<Permission>().eq("pid", id)) > 0) {
             throw new BeginException(ExceptionEnum.EXIST_CHILDREN);
         }
-        permissionDAO.deleteById(id);
+        baseMapper.deleteById(id);
     }
 
     @Override
     public void changeStatus(Integer id) {
-        Permission permission = permissionDAO.selectById(id);
+        Permission permission = baseMapper.selectById(id);
         if (permission == null) {
             throw new BeginException(ExceptionEnum.SERVER_ERROR);
         }
         permission.setStatus(permission.getStatus() * -1 + 1);
-        permissionDAO.updateById(permission);
+        baseMapper.updateById(permission);
     }
 
     @Override
     public List<TreeDTO> findPermissionTree() {
-        List<Permission> list = permissionDAO.selectList(new EntityWrapper<Permission>().orderAsc(Arrays.asList("sort")));
+        List<Permission> list = baseMapper.selectList(new EntityWrapper<Permission>().orderAsc(Arrays.asList("sort")));
 
         List<TreeDTO> treeVOList = list.stream().filter(item -> item.getStatus().equals(1))
                 .map(permission -> adapt(permission))
@@ -121,12 +121,12 @@ public class PermissionServiceImpl implements PermissionService {
         if (CollectionUtils.isEmpty(roleIds)) {
             return null;
         }
-        return permissionDAO.selectList(new EntityWrapper<Permission>().in("role_id", roleIds));
+        return baseMapper.selectList(new EntityWrapper<Permission>().in("role_id", roleIds));
     }
 
     @Override
     public List<Integer> findPermissionIdByRoleId(Integer roleId) {
-        List<RolePermission> rolePermissionList = rolePermissionDAO.selectList(new EntityWrapper<RolePermission>().eq("role_id", roleId));
+        List<RolePermission> rolePermissionList = rolePermissionService.selectList(new EntityWrapper<RolePermission>().eq("role_id", roleId));
         if (!CollectionUtils.isEmpty(rolePermissionList)) {
             return rolePermissionList.stream().map(item -> item.getPermissionId()).collect(Collectors.toList());
         }
@@ -135,10 +135,20 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<Permission> findAllByUserId(Integer userId) {
-        List<Integer> roleIds = permissionDAO.findPermissionIdByUserId(userId);
+        List<Integer> roleIds = baseMapper.findPermissionIdByUserId(userId);
         if (CollectionUtils.isEmpty(roleIds)) {
             return null;
         }
         return findAllByRoleIds(roleIds);
+    }
+
+    @Override
+    public Boolean deletePermissionByRoleId(Integer roleId) {
+        return rolePermissionService.delete(new EntityWrapper<RolePermission>().eq("role_id", roleId));
+    }
+
+    @Override
+    public Boolean batchInsertRolePermission(List<RolePermission> list) {
+        return rolePermissionService.insertBatch(list);
     }
 }

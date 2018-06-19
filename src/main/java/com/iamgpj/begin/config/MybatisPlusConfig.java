@@ -24,7 +24,7 @@ import javax.sql.DataSource;
  * @Create: 2018/6/19 12:57
  */
 @Configuration
-@MapperScan("com.iamgpj.begin.module.*.*.dao")
+@MapperScan("com.iamgpj.begin.module.**.dao")
 public class MybatisPlusConfig {
 
     @Autowired
@@ -57,8 +57,7 @@ public class MybatisPlusConfig {
         factoryBean.setDataSource(dataSource);
 
         factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mappers/*Mapper.xml"));
-        factoryBean.setTypeAliasesPackage("com.iamgpj.begin.module.*.*.entity");
-        factoryBean.setTypeEnumsPackage("com.iamgpj.begin.module.*.*.enums");
+        factoryBean.setTypeAliasesPackage("com.iamgpj.begin.module.**.entity");
 
         MybatisConfiguration configuration = new MybatisConfiguration();
 
