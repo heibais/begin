@@ -1,5 +1,7 @@
 package com.iamgpj.begin.module.admin.auth.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.core.exception.enums.ExceptionEnum;
 import com.iamgpj.begin.core.util.ToolUtils;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,18 +35,18 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public List<DeptDTO> findAllTree() {
-        List<Dept> depts = deptDAO.findAll(Sort.by(Sort.Direction.ASC, "sort"));
+        List<Dept> depts = deptDAO.selectList(new EntityWrapper<Dept>().orderAsc(Arrays.asList("sort")));
         List<DeptDTO> deptDTOS = depts.stream().map(dept -> ToolUtils.map(dept, DeptDTO.class)).collect(Collectors.toList());
         return ToolUtils.list2Tree(deptDTOS);
     }
 
 
     private boolean checkExist(Integer id, String name) {
-        if (id == null) {
-            return deptDAO.countByName(name) > 0;
-        } else {
-            return deptDAO.countByIdNotAndName(id, name) > 0;
+        Wrapper<Dept> wrapper = new EntityWrapper<Dept>().eq("name", name);
+        if (id != null) {
+            wrapper.ne("id", id);
         }
+        return deptDAO.selectCount(wrapper) > 0;
     }
 
     @Override
@@ -53,15 +56,18 @@ public class DeptServiceImpl implements DeptService {
             throw new BeginException(ExceptionEnum.EXIST_CHILDREN);
         }
         // 拼装对象
-        Dept dept = new Dept();
-        BeanUtils.copyProperties(param, dept);
-        deptDAO.save(dept);
+        Dept dept = ToolUtils.map(param, Dept.class);
+        if (dept.getId() != null) {
+            deptDAO.insert(dept);
+        } else {
+            deptDAO.updateById(dept);
+        }
     }
 
     @Override
     public void removeById(Integer deptId) {
         // 判断是否存在子部门
-        if (deptDAO.countDeptByPid(deptId) > 0) {
+        if (deptDAO.selectCount(new EntityWrapper<Dept>().eq("pid", deptId)) > 0) {
             throw new BeginException(ExceptionEnum.EXIST_CHILDREN);
         }
         // TODO 判断是否存在用户
@@ -70,6 +76,11 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public void changeStatus(Integer id) {
-        deptDAO.changeStatus(id);
+        Dept dept = deptDAO.selectById(id);
+        if (dept == null) {
+            throw new BeginException(ExceptionEnum.SERVER_ERROR);
+        }
+        dept.setStatus(dept.getStatus() * -1 + 1);
+        deptDAO.updateById(dept);
     }
 }

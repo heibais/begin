@@ -57,10 +57,22 @@ public interface PermissionService {
     List<Permission> findAllByRoleIds(List<Integer> roleIds);
 
     /**
+     * 通过角色id 查询权限id
+     * @param roleId 角色id
+     * @return
+     */
+    List<Integer> findPermissionIdByRoleId(Integer roleId);
+
+    /**
      * 通过用户id 查询权限
      * @param userId 用户id
      * @return
      */
     List<Permission> findAllByUserId(Integer userId);
 
+    /**
+     *
+     * @param roleId
+     */
+    void deletePermissionAllByRoleId(Integer roleId);
 }

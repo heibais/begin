@@ -1,8 +1,13 @@
 package com.iamgpj.begin.module.admin.auth.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.FieldFill;
+import com.iamgpj.begin.core.biz.mybatisPlus.SuperEntity;
 import lombok.Data;
 
-import javax.persistence.*;
+import java.time.LocalDateTime;
+
 
 /**
  * @author: gpj
@@ -11,13 +16,9 @@ import javax.persistence.*;
  * @Modified By:
  */
 @Data
-@Entity
-@Table(name = "bg_sys_dept")
-public class Dept {
+@TableName(value = "bg_sys_dept")
+public class Dept extends SuperEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
     /** 上级部门id */
     private Integer pid;
     /** 部门名称 */
@@ -26,4 +27,7 @@ public class Dept {
     private Integer sort;
     /** 状态 */
     private Integer status;
+
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 }

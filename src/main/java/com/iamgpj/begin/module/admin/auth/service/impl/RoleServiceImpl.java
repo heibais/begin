@@ -1,5 +1,7 @@
 package com.iamgpj.begin.module.admin.auth.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.core.exception.enums.ExceptionEnum;
 import com.iamgpj.begin.core.util.ToolUtils;
@@ -7,9 +9,12 @@ import com.iamgpj.begin.module.admin.auth.dao.RoleDAO;
 import com.iamgpj.begin.module.admin.auth.dao.RolePermissionDAO;
 import com.iamgpj.begin.module.admin.auth.dao.RoleUserDAO;
 import com.iamgpj.begin.module.admin.auth.dto.RoleDTO;
+import com.iamgpj.begin.module.admin.auth.entity.Permission;
 import com.iamgpj.begin.module.admin.auth.entity.Role;
 import com.iamgpj.begin.module.admin.auth.entity.RolePermission;
+import com.iamgpj.begin.module.admin.auth.entity.RoleUser;
 import com.iamgpj.begin.module.admin.auth.param.RoleParam;
+import com.iamgpj.begin.module.admin.auth.service.PermissionService;
 import com.iamgpj.begin.web.rule.service.RoleService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Sort;
@@ -19,6 +24,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,26 +39,27 @@ public class RoleServiceImpl implements RoleService {
     @Resource
     private RoleDAO roleDAO;
     @Resource
-    private RolePermissionDAO rolePermissionDAO;
-    @Resource
     private RoleUserDAO roleUserDAO;
+    @Resource
+    private PermissionService permissionService;
+
 
     @Override
     public List<RoleDTO> findAll() {
-        List<Role> roleList = roleDAO.findAll(new Sort(Sort.Direction.ASC, "sort"));
+        List<Role> roleList = roleDAO.selectList(new EntityWrapper<Role>().orderAsc(Arrays.asList("sort")));
         return roleList.stream().map(role -> {
             RoleDTO roleDTO = ToolUtils.map(role, RoleDTO.class);
-            roleDTO.setPermissionIdList(rolePermissionDAO.findPermissionIdListByRoleId(role.getId()));
+            roleDTO.setPermissionIdList(permissionService.findPermissionIdByRoleId(role.getId()));
             return roleDTO;
         }).collect(Collectors.toList());
     }
 
     private boolean checkExist(Integer id, String name) {
-        if (id == null) {
-            return roleDAO.countByName(name) > 0;
-        } else {
-            return roleDAO.countByNameAndIdNot(name, id) > 0;
+        Wrapper<Role> wrapper = new EntityWrapper<Role>().eq("name", name);
+        if (id != null) {
+            wrapper.ne("id", id);
         }
+        return roleDAO.selectCount(wrapper) > 0;
     }
 
     @Override
@@ -63,13 +70,17 @@ public class RoleServiceImpl implements RoleService {
         }
         // 拼装对象
         Role role = ToolUtils.map(param, Role.class);
-        roleDAO.save(role);
+        if (role.getId() == null) {
+            roleDAO.insert(role);
+        } else {
+            roleDAO.updateById(role);
+        }
     }
 
     @Override
     public void removeById(Integer id) {
         // 判断该角色下是否拥有用户
-        if (roleUserDAO.countByRoleId(id) > 0) {
+        if (roleUserDAO.selectCount(new EntityWrapper<RoleUser>().eq("role_id", id)) > 0) {
             throw new BeginException(ExceptionEnum.EXIST_CHILDREN);
         }
         roleDAO.deleteById(id);
@@ -77,14 +88,19 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void changeStatus(Integer id) {
-        roleDAO.changeStatus(id);
+        Role role = roleDAO.selectById(id);
+        if (role == null) {
+            throw new BeginException(ExceptionEnum.SERVER_ERROR);
+        }
+        role.setStatus(role.getStatus() * -1 + 1);
+        roleDAO.updateById(role);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveRolePermission(Integer roleId, String permissionIds) {
         //1 清除旧权限
-        rolePermissionDAO.deleteAllByRoleId(roleId);
+        permissionService.deletePermissionAllByRoleId(roleId);
         //2 添加新权限
         if (StringUtils.hasText(permissionIds)) {
             String[] split = permissionIds.split(",");
@@ -92,13 +108,13 @@ public class RoleServiceImpl implements RoleService {
             for (String ruleId : split) {
                 list.add(new RolePermission(roleId, Integer.parseInt(ruleId)));
             }
-            rolePermissionDAO.saveAll(list);
+            //rolePermissionDAO.saveAll(list);
         }
     }
 
     @Override
     public List<Role> findSimpleAll() {
-        List<Role> roles = roleDAO.findAll(Sort.by(Sort.Direction.ASC, "sort"));
+        List<Role> roles = roleDAO.selectList(new EntityWrapper<Role>().orderAsc(Arrays.asList("sort")));
         return roles.stream().filter(role -> role.getStatus().equals(1)).collect(Collectors.toList());
     }
 }

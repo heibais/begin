@@ -1,8 +1,8 @@
 package com.iamgpj.begin.module.admin.auth.entity;
 
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.iamgpj.begin.core.biz.mybatisPlus.SuperEntity;
 import lombok.Data;
-
-import javax.persistence.*;
 
 /**
  * @author: GPJ
@@ -11,13 +11,9 @@ import javax.persistence.*;
  * @Modified By:
  */
 @Data
-@Entity
-@Table(name = "bg_sys_role_user")
-public class RoleUser {
+@TableName(value = "bg_sys_role_user")
+public class RoleUser extends SuperEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
     /** 角色id */
     private Integer roleId;
     /** 用户id */
@@ -31,4 +27,5 @@ public class RoleUser {
         this.roleId = roleId;
         this.userId = userId;
     }
+
 }
