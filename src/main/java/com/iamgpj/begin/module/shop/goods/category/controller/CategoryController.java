@@ -33,26 +33,26 @@ public class CategoryController {
     }
 
     @ApiOperation(value = "保存或者编辑商品分类（已实现）", notes = "保存或者编辑商品分类", tags = {"shop", "shop-category"})
-    @PostMapping
-    public RespJson save(@Validated @RequestBody CategoryParam param, BindingResult bindingResult) {
+    @PostMapping("/{userId:\\d+}/category")
+    public RespJson save(@PathVariable Integer userId, @Validated @RequestBody CategoryParam param, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new BeginException(bindingResult.getFieldError().getDefaultMessage());
         }
-        categoryService.save(param);
+        categoryService.save(userId, param);
         return RespJson.createSuccess("操作成功");
     }
 
     @ApiOperation(value = "删除商品分类（已实现）", notes = "删除商品分类", tags = {"shop", "shop-category"})
-    @DeleteMapping("/{id:\\d+}")
-    public RespJson deleteOne(@PathVariable("id") Integer id) {
-        categoryService.delete(id);
+    @DeleteMapping("/{userId:\\d+}/category/{id:\\d+}")
+    public RespJson deleteOne(@PathVariable("userId") Integer userId, @PathVariable("id") Integer id) {
+        categoryService.delete(userId, id);
         return RespJson.createSuccess("删除成功");
     }
 
 
     @ApiOperation(value = "切换商品分类状态（已实现）", notes = "切换商品分类状态", tags = {"shop", "shop-category"})
-    @GetMapping("/{id:\\d+}/change-status")
-    public RespJson changeStatus(@PathVariable("id") Integer id) {
+    @GetMapping("/{userId:\\d+}/category/{id:\\d+}/change-status")
+    public RespJson changeStatus(@PathVariable("userId") Integer userId, @PathVariable("id") Integer id) {
         categoryService.changeStatus(id);
         return RespJson.createSuccess("切换状态成功");
     }

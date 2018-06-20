@@ -22,13 +22,13 @@ public interface CategoryService {
      * 新增或编辑
      * @param param
      */
-    void save(CategoryParam param);
+    void save(Integer userId, CategoryParam param);
 
     /**
      * 删除
      * @param id 主键
      */
-    void delete(Integer id);
+    void delete(Integer userId, Integer id);
 
     /**
      * 改变状态

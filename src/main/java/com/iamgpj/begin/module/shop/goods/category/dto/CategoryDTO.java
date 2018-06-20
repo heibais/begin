@@ -1,5 +1,6 @@
 package com.iamgpj.begin.module.shop.goods.category.dto;
 
+import com.iamgpj.begin.core.common.CommonTree;
 import lombok.Data;
 
 /**
@@ -8,11 +9,9 @@ import lombok.Data;
  * @Create: 2018/6/18 18:06
  */
 @Data
-public class CategoryDTO {
+public class CategoryDTO extends CommonTree {
 
-    private Integer id;
-    /** 父id */
-    private Integer pid;
+    private Integer key;
     /** 用户id */
     private Integer userId;
     /** 分类名称 */
@@ -23,4 +22,8 @@ public class CategoryDTO {
     private Integer status;
     /** 是否推荐 */
     private Integer recommend;
+
+    public Integer getKey() {
+        return this.getId();
+    }
 }

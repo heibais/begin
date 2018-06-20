@@ -30,11 +30,13 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDAO, Category> impl
     public List<CategoryDTO> list(Integer userId) {
         // 查询条件
         List<Category> categoryList = baseMapper.selectList(new EntityWrapper<Category>().eq("user_id", userId).orderAsc(Arrays.asList("sort")));
-        return ToolUtils.mapList(categoryList, CategoryDTO.class);
+        List<CategoryDTO> categoryDTOList = ToolUtils.mapList(categoryList, CategoryDTO.class);
+        return ToolUtils.list2Tree(categoryDTOList);
     }
 
     @Override
-    public void save(CategoryParam param) {
+    public void save(Integer userId, CategoryParam param) {
+        param.setUserId(userId);
         // 判断是否存在该分类
         if (checkExist(param.getId(), param.getName(), param.getUserId())) {
             throw new BeginException(ExceptionEnum.DATA_EXISTED);
@@ -63,8 +65,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDAO, Category> impl
     }
 
     @Override
-    public void delete(Integer id) {
-        if (baseMapper.selectCount(new EntityWrapper<Category>().eq("pid", id)) > 0) {
+    public void delete(Integer userId, Integer id) {
+        if (baseMapper.selectCount(new EntityWrapper<Category>().eq("pid", id).eq("user_id", userId)) > 0) {
             throw new BeginException(ExceptionEnum.EXIST_CHILDREN);
         }
         // 判断是否存在子栏目
