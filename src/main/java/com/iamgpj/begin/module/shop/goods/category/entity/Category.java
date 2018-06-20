@@ -1,8 +1,12 @@
 package com.iamgpj.begin.module.shop.goods.category.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.FieldFill;
 import com.iamgpj.begin.core.biz.mybatisPlus.SuperEntity;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * @Description: 商品分类
@@ -25,4 +29,7 @@ public class Category extends SuperEntity {
     private Integer status;
     /** 是否推荐 */
     private Integer recommend;
+    /** 创建时间 */
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 }

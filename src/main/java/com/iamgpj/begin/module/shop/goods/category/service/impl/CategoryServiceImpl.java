@@ -14,6 +14,7 @@ import com.iamgpj.begin.module.shop.goods.category.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDAO, Category> impl
         }
         Category category = ToolUtils.map(param, Category.class);
         if (category.getId() == null) {
+            category.setCreateTime(LocalDateTime.now());
             baseMapper.insert(category);
         } else {
             baseMapper.updateById(category);
