@@ -1,5 +1,6 @@
 package com.iamgpj.begin.module.shop.goods.brand.service;
 
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.iamgpj.begin.module.shop.goods.brand.dto.BrandDTO;
 import com.iamgpj.begin.module.shop.goods.brand.param.BrandParam;
 
@@ -17,7 +18,7 @@ public interface BrandService {
      * @param userId
      * @return
      */
-    List<BrandDTO> list(Integer userId);
+    List<BrandDTO> list(Pagination pagination, Integer userId);
 
     /**
      * 保存或新增品牌

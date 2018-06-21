@@ -1,6 +1,7 @@
 package com.iamgpj.begin.module.shop.goods.brand.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.core.exception.enums.ExceptionEnum;
@@ -23,14 +24,20 @@ import java.util.List;
 public class BrandServiceImpl extends ServiceImpl<BrandDao, Brand> implements BrandService {
 
     @Override
-    public List<BrandDTO> list(Integer userId) {
-        List<Brand> brandList = baseMapper.selectList(new EntityWrapper<Brand>().eq("user_id", userId));
+    public List<BrandDTO> list(Pagination pagination, Integer userId) {
+        List<Brand> brandList = baseMapper.selectPage(pagination, new EntityWrapper<Brand>().eq("user_id", userId));
         return ToolUtils.mapList(brandList, BrandDTO.class);
     }
 
     @Override
     public void save(Integer userId, BrandParam param) {
-
+        param.setUserId(userId);
+        Brand brand = ToolUtils.map(param, Brand.class);
+        if (brand.getId() == null) {
+            baseMapper.insert(brand);
+        } else {
+            baseMapper.updateById(brand);
+        }
     }
 
     @Override
