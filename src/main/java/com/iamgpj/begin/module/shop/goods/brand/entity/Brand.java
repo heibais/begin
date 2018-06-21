@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 @TableName(value = "bg_goods_brand")
 public class Brand extends SuperEntity {
 
+    /** 所属用户 */
+    private Integer userId;
     /** 品牌名称 */
     private String brandName;
     /** 品牌logo */

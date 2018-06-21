@@ -25,6 +25,7 @@ public enum ExceptionEnum implements ServiceExceptionEnum {
     /**
      * 错误的请求
      */
+    PARAM_ERROR(100, "参数错误"),
     REQUEST_ERROR(400, "请求有错误"),
     SESSION_TIMEOUT(400, "会话超时"),
     SERVER_ERROR(500, "服务器异常");
