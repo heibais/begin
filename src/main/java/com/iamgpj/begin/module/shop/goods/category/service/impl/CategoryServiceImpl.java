@@ -76,12 +76,22 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDAO, Category> impl
     }
 
     @Override
-    public void changeStatus(Integer id) {
+    public void changeStatus(Integer userId, Integer id) {
         Category category = baseMapper.selectById(id);
-        if (category == null) {
-            throw new BeginException(ExceptionEnum.SERVER_ERROR);
+        if (category == null || !category.getUserId().equals(userId)) {
+            throw new BeginException(ExceptionEnum.PARAM_ERROR);
         }
         category.setStatus(category.getStatus() * -1 + 1);
+        baseMapper.updateById(category);
+    }
+
+    @Override
+    public void changeRecommend(Integer userId, Integer id) {
+        Category category = baseMapper.selectById(id);
+        if (category == null || !category.getUserId().equals(userId)) {
+            throw new BeginException(ExceptionEnum.PARAM_ERROR);
+        }
+        category.setRecommend(category.getRecommend() * -1 + 1);
         baseMapper.updateById(category);
     }
 }

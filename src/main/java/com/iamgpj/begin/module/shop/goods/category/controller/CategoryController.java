@@ -53,7 +53,14 @@ public class CategoryController {
     @ApiOperation(value = "切换商品分类状态（已实现）", notes = "切换商品分类状态", tags = {"shop", "shop-category"})
     @GetMapping("/{userId:\\d+}/category/{id:\\d+}/change-status")
     public RespJson changeStatus(@PathVariable("userId") Integer userId, @PathVariable("id") Integer id) {
-        categoryService.changeStatus(id);
+        categoryService.changeStatus(userId, id);
+        return RespJson.createSuccess("切换状态成功");
+    }
+
+    @ApiOperation(value = "切换商品分类推荐状态（已实现）", notes = "切换商品推荐状态", tags = {"shop", "shop-category"})
+    @GetMapping("/{userId:\\d+}/category/{id:\\d+}/change-recommend")
+    public RespJson changeRecommend(@PathVariable("userId") Integer userId, @PathVariable("id") Integer id) {
+        categoryService.changeRecommend(userId, id);
         return RespJson.createSuccess("切换状态成功");
     }
 

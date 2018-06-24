@@ -41,7 +41,7 @@ public class LoginController {
         if (errMsg != null) {
             return RespJson.createError(errMsg);
         }
-        return RespJson.createSuccess("登录成功");
+        return RespJson.createSuccess(ShiroUtils.getUserPrincipal());
     }
 
     @GetMapping("/logout")

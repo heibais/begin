@@ -13,6 +13,7 @@ import com.iamgpj.begin.module.shop.goods.brand.param.BrandParam;
 import com.iamgpj.begin.module.shop.goods.brand.service.BrandService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -34,6 +35,7 @@ public class BrandServiceImpl extends ServiceImpl<BrandDao, Brand> implements Br
         param.setUserId(userId);
         Brand brand = ToolUtils.map(param, Brand.class);
         if (brand.getId() == null) {
+            brand.setCreateTime(LocalDateTime.now());
             baseMapper.insert(brand);
         } else {
             baseMapper.updateById(brand);

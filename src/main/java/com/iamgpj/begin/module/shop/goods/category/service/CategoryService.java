@@ -34,5 +34,11 @@ public interface CategoryService {
      * 改变状态
      * @param id 主键
      */
-    void changeStatus(Integer id);
+    void changeStatus(Integer userId, Integer id);
+
+    /**
+     * 改变推荐状态
+     * @param id 主键
+     */
+    void changeRecommend(Integer userId, Integer id);
 }
