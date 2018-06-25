@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.FieldFill;
 import com.iamgpj.begin.core.biz.mybatisPlus.SuperEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
  * @Create: 2018/6/20 23:02
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @TableName(value = "bg_goods_brand")
 public class Brand extends SuperEntity {
 

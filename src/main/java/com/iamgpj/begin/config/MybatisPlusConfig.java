@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.mapper.LogicSqlInjector;
 import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.plugins.PerformanceInterceptor;
 import com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean;
+import com.iamgpj.begin.core.biz.mybatisPlus.MyMetaObjectHandler;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
@@ -24,6 +26,7 @@ import javax.sql.DataSource;
  * @Create: 2018/6/19 12:57
  */
 @Configuration
+@EnableTransactionManagement
 @MapperScan("com.iamgpj.begin.module.**.dao")
 public class MybatisPlusConfig {
 
@@ -95,7 +98,7 @@ public class MybatisPlusConfig {
         // 自定义sql注入器
         conf.setSqlInjector(new LogicSqlInjector());
         // 自定义填充策略接口实现
-        //conf.setMetaObjectHandler();
+        conf.setMetaObjectHandler(new MyMetaObjectHandler());
         return conf;
     }
 }

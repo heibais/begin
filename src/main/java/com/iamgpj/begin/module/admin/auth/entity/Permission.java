@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.FieldFill;
 import com.iamgpj.begin.core.biz.mybatisPlus.SuperEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
  * @Modified By:
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @TableName(value = "bg_sys_permission")
 public class Permission extends SuperEntity {
 

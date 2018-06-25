@@ -1,9 +1,11 @@
 package com.iamgpj.begin.module.shop.goods.brand.controller;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.iamgpj.begin.core.common.RespJson;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.module.shop.goods.brand.dto.BrandDTO;
+import com.iamgpj.begin.module.shop.goods.brand.entity.Brand;
 import com.iamgpj.begin.module.shop.goods.brand.param.BrandParam;
 import com.iamgpj.begin.module.shop.goods.brand.service.BrandService;
 import io.swagger.annotations.ApiOperation;
@@ -29,8 +31,8 @@ public class BrandController {
 
     @ApiOperation(value = "查询商品品牌列表（已实现）", notes = "查询商品品牌列表", tags = {"shop", "shop-brand"})
     @GetMapping("/{userId:\\d+}/brand")
-    public RespJson list(@PageableDefault Pagination pagination, @PathVariable("userId") Integer userId) {
-        List<BrandDTO> brandDTOList = brandService.list(pagination, userId);
+    public RespJson list(@PageableDefault Page<BrandDTO> page, @PathVariable("userId") Integer userId) {
+        Page<BrandDTO> brandDTOList = brandService.list(page, userId);
         return RespJson.createSuccess(brandDTOList);
     }
 

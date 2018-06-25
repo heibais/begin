@@ -1,7 +1,7 @@
 package com.iamgpj.begin.module.shop.goods.brand.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.core.exception.enums.ExceptionEnum;
@@ -25,9 +25,10 @@ import java.util.List;
 public class BrandServiceImpl extends ServiceImpl<BrandDao, Brand> implements BrandService {
 
     @Override
-    public List<BrandDTO> list(Pagination pagination, Integer userId) {
-        List<Brand> brandList = baseMapper.selectPage(pagination, new EntityWrapper<Brand>().eq("user_id", userId));
-        return ToolUtils.mapList(brandList, BrandDTO.class);
+    public Page<BrandDTO> list(Page<BrandDTO> page, Integer userId) {
+        List<Brand> brandList = baseMapper.selectPage(page, new EntityWrapper<Brand>().eq("user_id", userId));
+        page.setRecords(ToolUtils.mapList(brandList, BrandDTO.class));
+        return page;
     }
 
     @Override
@@ -35,7 +36,6 @@ public class BrandServiceImpl extends ServiceImpl<BrandDao, Brand> implements Br
         param.setUserId(userId);
         Brand brand = ToolUtils.map(param, Brand.class);
         if (brand.getId() == null) {
-            brand.setCreateTime(LocalDateTime.now());
             baseMapper.insert(brand);
         } else {
             baseMapper.updateById(brand);

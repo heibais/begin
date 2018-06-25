@@ -3,6 +3,7 @@ package com.iamgpj.begin.module.admin.auth.entity;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.iamgpj.begin.core.biz.mybatisPlus.SuperEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author: GPJ
@@ -11,6 +12,7 @@ import lombok.Data;
  * @Modified By:
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @TableName(value = "bg_sys_role_user")
 public class RoleUser extends SuperEntity {
 

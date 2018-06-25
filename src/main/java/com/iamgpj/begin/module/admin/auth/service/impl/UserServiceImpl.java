@@ -2,7 +2,7 @@ package com.iamgpj.begin.module.admin.auth.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.core.exception.enums.ExceptionEnum;
@@ -39,7 +39,7 @@ public class UserServiceImpl extends ServiceImpl<UserDAO, User> implements UserS
     private RoleUserService roleUserService;
 
     @Override
-    public List<UserDTO> findAll(Pagination pageable, UserSearchParam search) {
+    public Page<UserDTO> findAll(Page<UserDTO> page, UserSearchParam search) {
         User user = ToolUtils.map(search, User.class);
         // 查询条件
         EntityWrapper<User> wrapper = new EntityWrapper<>();
@@ -53,10 +53,11 @@ public class UserServiceImpl extends ServiceImpl<UserDAO, User> implements UserS
             wrapper.eq("email", user.getEmail());
         }
         // 开始查询
-        List<User> userList = baseMapper.selectPage(pageable, wrapper);
+        List<User> userList = baseMapper.selectPage(page, wrapper);
         // 封装查询结果
         List<UserDTO> dtoList = userList.stream().map(item -> adapt(item)).collect(Collectors.toList());
-        return dtoList;
+        page.setRecords(dtoList);
+        return page;
     }
 
     @Override

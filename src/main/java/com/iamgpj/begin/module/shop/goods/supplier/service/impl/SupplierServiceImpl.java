@@ -1,7 +1,7 @@
 package com.iamgpj.begin.module.shop.goods.supplier.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.core.exception.enums.ExceptionEnum;
@@ -24,9 +24,9 @@ import java.util.List;
 public class SupplierServiceImpl extends ServiceImpl<SupplierDAO, Supplier> implements SupplierService {
 
     @Override
-    public List<SupplierDTO> list(Pagination pagination, Integer userId) {
-        List<Supplier> supplierList = baseMapper.selectPage(pagination, new EntityWrapper<Supplier>().eq("user_id", userId));
-        return ToolUtils.mapList(supplierList, SupplierDTO.class);
+    public Page<SupplierDTO> list(Page<SupplierDTO> page, Integer userId) {
+        List<Supplier> supplierList = baseMapper.selectPage(page, new EntityWrapper<Supplier>().eq("user_id", userId));
+        return page.setRecords(ToolUtils.mapList(supplierList, SupplierDTO.class));
     }
 
     @Override

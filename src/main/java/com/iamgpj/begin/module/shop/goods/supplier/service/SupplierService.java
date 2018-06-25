@@ -1,10 +1,8 @@
 package com.iamgpj.begin.module.shop.goods.supplier.service;
 
-import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.iamgpj.begin.module.shop.goods.supplier.dto.SupplierDTO;
 import com.iamgpj.begin.module.shop.goods.supplier.param.SupplierParam;
-
-import java.util.List;
 
 /**
  * @Description:
@@ -15,10 +13,11 @@ public interface SupplierService {
 
     /**
      * 查询供应商列表
+     * @param page
      * @param userId
      * @return
      */
-    List<SupplierDTO> list(Pagination pagination, Integer userId);
+    Page<SupplierDTO> list(Page<SupplierDTO> page, Integer userId);
 
     /**
      * 保存或新增供应商

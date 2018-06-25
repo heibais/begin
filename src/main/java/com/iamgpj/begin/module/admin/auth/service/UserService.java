@@ -1,12 +1,11 @@
 package com.iamgpj.begin.module.admin.auth.service;
 
-import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.iamgpj.begin.module.admin.auth.dto.UserDTO;
 import com.iamgpj.begin.module.admin.auth.entity.User;
 import com.iamgpj.begin.module.admin.auth.param.UpdatePwdParam;
 import com.iamgpj.begin.module.admin.auth.param.UserParam;
 import com.iamgpj.begin.module.admin.auth.param.UserSearchParam;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ public interface UserService {
      * 查询所有
      * @return
      */
-    List<UserDTO> findAll(Pagination pageable, UserSearchParam search);
+    Page<UserDTO> findAll(Page<UserDTO> page, UserSearchParam search);
 
     /**
      * 根据id查询用户

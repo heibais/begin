@@ -44,7 +44,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDAO, Category> impl
         }
         Category category = ToolUtils.map(param, Category.class);
         if (category.getId() == null) {
-            category.setCreateTime(LocalDateTime.now());
             baseMapper.insert(category);
         } else {
             baseMapper.updateById(category);

@@ -1,10 +1,12 @@
 package com.iamgpj.begin.module.admin.auth.controller;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.iamgpj.begin.core.common.RespJson;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.core.shiro.subject.UserPrincipal;
 import com.iamgpj.begin.core.util.ShiroUtils;
+import com.iamgpj.begin.module.admin.auth.dto.UserDTO;
 import com.iamgpj.begin.module.admin.auth.param.UpdatePwdParam;
 import com.iamgpj.begin.module.admin.auth.param.UserParam;
 import com.iamgpj.begin.module.admin.auth.param.UserRoleParam;
@@ -34,8 +36,8 @@ public class UserController {
 
     @ApiOperation(value = "查询用户列表（已实现）", notes = "查询用户列表", tags = {"auth", "auth-user"})
     @GetMapping
-    public RespJson list(@PageableDefault Pagination pageable, UserSearchParam search) {
-        return RespJson.createSuccess(userService.findAll(pageable, search));
+    public RespJson list(@PageableDefault Page<UserDTO> page, UserSearchParam search) {
+        return RespJson.createSuccess(userService.findAll(page, search));
     }
 
     @ApiOperation(value = "获取当前用户（已实现）", notes = "查询用户", tags = {"auth", "auth-user"})

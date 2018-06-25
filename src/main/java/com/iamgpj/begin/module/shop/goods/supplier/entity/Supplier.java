@@ -1,9 +1,11 @@
 package com.iamgpj.begin.module.shop.goods.supplier.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.FieldFill;
 import com.iamgpj.begin.core.biz.mybatisPlus.SuperEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +15,8 @@ import java.time.LocalDateTime;
  * @Create: 2018/6/20 23:27
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
+@TableName(value = "bg_shop_supplier")
 public class Supplier extends SuperEntity {
 
     private Integer userId;

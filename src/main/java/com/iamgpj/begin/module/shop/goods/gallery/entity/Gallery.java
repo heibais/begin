@@ -1,4 +1,4 @@
-package com.iamgpj.begin.module.shop.goods.category.entity;
+package com.iamgpj.begin.module.shop.goods.gallery.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
@@ -10,28 +10,27 @@ import lombok.EqualsAndHashCode;
 import java.time.LocalDateTime;
 
 /**
- * @Description: 商品分类
- * @author: gpj
- * @Create: 2018/6/18 17:56
+ * @Description:
+ * @author: GPJ
+ * @Create: 2018/6/25 11:58
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "bg_shop_category")
-public class Category extends SuperEntity {
-
-    /** 父id */
-    private Integer pid;
+@TableName(value = "bg_shop_gallery")
+public class Gallery extends SuperEntity {
     /** 用户id */
     private Integer userId;
-    /** 分类名称 */
-    private String name;
-    /** 排序 */
-    private Integer sort;
-    /** 是否显启用 */
-    private Integer status;
-    /** 是否推荐 */
-    private Integer recommend;
-    /** 创建时间 */
+    /** 商品id */
+    private Integer goodsId;
+    /** 商品图片 */
+    private String imgUrl;
+    /** 商品描述 */
+    private String imgDesc;
+    /** 商品缩略图 */
+    private String thumbUrl;
+    /** 商品原图 */
+    private String imgOriginal;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 }
