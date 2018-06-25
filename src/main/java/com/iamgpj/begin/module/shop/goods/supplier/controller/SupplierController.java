@@ -42,13 +42,20 @@ public class SupplierController {
             throw new BeginException(bindingResult.getFieldError().getDefaultMessage());
         }
         supplierService.save(userId, param);
-        return RespJson.createSuccess();
+        return RespJson.createSuccess("操作成功");
     }
 
-    @ApiOperation(value = "查询商品供应商列表（已实现）", notes = "查询商品供应商列表", tags = {"shop", "shop-supplier"})
+    @ApiOperation(value = "删除商品供应商（已实现）", notes = "查询商品供应商", tags = {"shop", "shop-supplier"})
     @DeleteMapping("/{userId:\\d+}/supplier/{supplierId:\\d+}")
     public RespJson list(@PathVariable("userId") Integer userId, @PathVariable("supplierId") Integer brandId) {
         supplierService.delete(userId, brandId);
-        return RespJson.createSuccess();
+        return RespJson.createSuccess("删除成功");
+    }
+
+    @ApiOperation(value = "切换供应商状态（已实现）", notes = "切换供应商状态", tags = {"shop", "shop-supplier"})
+    @GetMapping("/{userId:\\d+}/supplier/{id:\\d+}/change-status")
+    public RespJson changeStatus(@PathVariable("userId") Integer userId, @PathVariable("id") Integer id) {
+        supplierService.changeStatus(userId, id);
+        return RespJson.createSuccess("切换成功");
     }
 }

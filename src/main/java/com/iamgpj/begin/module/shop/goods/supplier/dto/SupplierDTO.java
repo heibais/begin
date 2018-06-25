@@ -10,6 +10,8 @@ import lombok.Data;
 @Data
 public class SupplierDTO {
 
+    private Integer key;
+
     private Integer id;
     private Integer userId;
     /** 供应商名称 */
@@ -18,4 +20,8 @@ public class SupplierDTO {
     private String supplierDesc;
     /** 状态 */
     private Integer status;
+
+    public Integer getKey() {
+        return this.getId();
+    }
 }

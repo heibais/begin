@@ -32,4 +32,11 @@ public interface SupplierService {
      * @param supplierId
      */
     void delete(Integer userId, Integer supplierId);
+
+    /**
+     * 切换状态
+     * @param userId
+     * @param id
+     */
+    void changeStatus(Integer userId, Integer id);
 }

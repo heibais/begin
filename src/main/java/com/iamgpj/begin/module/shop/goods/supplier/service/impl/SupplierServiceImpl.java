@@ -48,4 +48,14 @@ public class SupplierServiceImpl extends ServiceImpl<SupplierDAO, Supplier> impl
         }
         baseMapper.deleteById(supplierId);
     }
+
+    @Override
+    public void changeStatus(Integer userId, Integer id) {
+        Supplier supplier = baseMapper.selectById(id);
+        if (supplier == null || !supplier.getUserId().equals(userId)) {
+            throw new BeginException(ExceptionEnum.PARAM_ERROR);
+        }
+        supplier.setStatus(supplier.getStatus() * -1 + 1);
+        baseMapper.updateById(supplier);
+    }
 }

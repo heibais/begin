@@ -32,4 +32,11 @@ public interface BrandService {
      * @param brandId
      */
     void delete(Integer userId, Integer brandId);
+
+    /**
+     * 改变显示状态
+     * @param userId 用户id
+     * @param id 主键
+     */
+    void changeShow(Integer userId, Integer id);
 }

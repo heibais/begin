@@ -10,6 +10,8 @@ import lombok.Data;
 @Data
 public class BrandDTO {
 
+    private Integer key;
+
     private Integer id;
     /** 所属用户 */
     private Integer userId;
@@ -25,4 +27,8 @@ public class BrandDTO {
     private String sort;
     /** 是否显示 (当品牌下还没有商品的时候，首页及分类页的品牌区将不会显示该品牌。) */
     private Integer show;
+
+    public Integer getKey() {
+        return this.getId();
+    }
 }

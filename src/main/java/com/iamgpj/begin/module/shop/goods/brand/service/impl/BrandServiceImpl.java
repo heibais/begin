@@ -26,7 +26,7 @@ public class BrandServiceImpl extends ServiceImpl<BrandDao, Brand> implements Br
 
     @Override
     public Page<BrandDTO> list(Page<BrandDTO> page, Integer userId) {
-        List<Brand> brandList = baseMapper.selectPage(page, new EntityWrapper<Brand>().eq("user_id", userId));
+        List<Brand> brandList = baseMapper.selectPage(page, new EntityWrapper<Brand>().eq("user_id", userId).orderBy("sort", true));
         page.setRecords(ToolUtils.mapList(brandList, BrandDTO.class));
         return page;
     }
@@ -49,5 +49,15 @@ public class BrandServiceImpl extends ServiceImpl<BrandDao, Brand> implements Br
             throw new BeginException(ExceptionEnum.PARAM_ERROR);
         }
         baseMapper.deleteById(brandId);
+    }
+
+    @Override
+    public void changeShow(Integer userId, Integer id) {
+        Brand brand = baseMapper.selectById(id);
+        if (brand == null || !brand.getUserId().equals(userId)) {
+            throw new BeginException(ExceptionEnum.PARAM_ERROR);
+        }
+        brand.setShow(brand.getShow() * -1 + 1);
+        baseMapper.updateById(brand);
     }
 }
