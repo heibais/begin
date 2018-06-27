@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.iamgpj.begin.module.shop.goods.brand.dto.BrandDTO;
 import com.iamgpj.begin.module.shop.goods.brand.param.BrandParam;
 
+import java.util.List;
+
 /**
  * @Description:
  * @author: gpj
@@ -17,7 +19,14 @@ public interface BrandService {
      * @param userId
      * @return
      */
-    Page<BrandDTO> list(Page<BrandDTO> page, Integer userId);
+    Page<BrandDTO> listPage(Page<BrandDTO> page, Integer userId);
+
+    /**
+     * 查询列表
+     * @param userId
+     * @return
+     */
+    List<BrandDTO> list(Integer userId);
 
     /**
      * 保存或新增品牌
@@ -39,4 +48,7 @@ public interface BrandService {
      * @param id 主键
      */
     void changeShow(Integer userId, Integer id);
+
+
+
 }

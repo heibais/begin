@@ -13,6 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @Description:
  * @author: gpj
@@ -25,10 +27,17 @@ public class BrandController {
     @Autowired
     private BrandService brandService;
 
-    @ApiOperation(value = "查询商品品牌列表（已实现）", notes = "查询商品品牌列表", tags = {"shop", "shop-brand"})
+    @ApiOperation(value = "查询商品品牌分页列表（已实现）", notes = "查询商品品牌分页列表", tags = {"shop", "shop-brand"})
     @GetMapping("/{userId:\\d+}/brand")
-    public RespJson list(@PageableDefault Page<BrandDTO> page, @PathVariable("userId") Integer userId) {
-        Page<BrandDTO> brandDTOList = brandService.list(page, userId);
+    public RespJson listPage(@PageableDefault Page<BrandDTO> page, @PathVariable("userId") Integer userId) {
+        Page<BrandDTO> brandDTOList = brandService.listPage(page, userId);
+        return RespJson.createSuccess(brandDTOList);
+    }
+
+    @ApiOperation(value = "查询商品品牌列表（已实现）", notes = "查询商品品牌列表", tags = {"shop", "shop-brand"})
+    @GetMapping("/{userId:\\d+}/brand/no-page")
+    public RespJson list(@PathVariable("userId") Integer userId) {
+        List<BrandDTO> brandDTOList = brandService.list(userId);
         return RespJson.createSuccess(brandDTOList);
     }
 

@@ -25,10 +25,16 @@ import java.util.List;
 public class BrandServiceImpl extends ServiceImpl<BrandDao, Brand> implements BrandService {
 
     @Override
-    public Page<BrandDTO> list(Page<BrandDTO> page, Integer userId) {
+    public Page<BrandDTO> listPage(Page<BrandDTO> page, Integer userId) {
         List<Brand> brandList = baseMapper.selectPage(page, new EntityWrapper<Brand>().eq("user_id", userId).orderBy("sort", true));
         page.setRecords(ToolUtils.mapList(brandList, BrandDTO.class));
         return page;
+    }
+
+    @Override
+    public List<BrandDTO> list(Integer userId) {
+        List<Brand> brandList = baseMapper.selectList(new EntityWrapper<Brand>().eq("user_id", userId).orderBy("sort", true));
+        return ToolUtils.mapList(brandList, BrandDTO.class);
     }
 
     @Override

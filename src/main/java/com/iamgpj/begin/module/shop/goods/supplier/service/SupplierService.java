@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.iamgpj.begin.module.shop.goods.supplier.dto.SupplierDTO;
 import com.iamgpj.begin.module.shop.goods.supplier.param.SupplierParam;
 
+import java.util.List;
+
 /**
  * @Description:
  * @author: gpj
@@ -17,8 +19,14 @@ public interface SupplierService {
      * @param userId
      * @return
      */
-    Page<SupplierDTO> list(Page<SupplierDTO> page, Integer userId);
+    Page<SupplierDTO> listPage(Page<SupplierDTO> page, Integer userId);
 
+    /**
+     * 查询列表
+     * @param userId
+     * @return
+     */
+    List<SupplierDTO> list(Integer userId);
     /**
      * 保存或新增供应商
      * @param userId
@@ -39,4 +47,6 @@ public interface SupplierService {
      * @param id
      */
     void changeStatus(Integer userId, Integer id);
+
+
 }

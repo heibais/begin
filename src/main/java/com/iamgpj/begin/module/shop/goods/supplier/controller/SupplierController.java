@@ -1,7 +1,6 @@
 package com.iamgpj.begin.module.shop.goods.supplier.controller;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.iamgpj.begin.core.common.RespJson;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.module.shop.goods.supplier.dto.SupplierDTO;
@@ -28,10 +27,17 @@ public class SupplierController {
     @Autowired
     private SupplierService supplierService;
 
-    @ApiOperation(value = "查询商品供应商列表（已实现）", notes = "查询商品供应商列表", tags = {"shop", "shop-supplier"})
+    @ApiOperation(value = "查询商品供应商分页列表（已实现）", notes = "查询商品供应商分页列表", tags = {"shop", "shop-supplier"})
     @GetMapping("/{userId:\\d+}/supplier")
-    public RespJson list(@PageableDefault Page<SupplierDTO> page, @PathVariable("userId") Integer userId) {
-        Page<SupplierDTO> brandDTOList = supplierService.list(page, userId);
+    public RespJson listPage(@PageableDefault Page<SupplierDTO> page, @PathVariable("userId") Integer userId) {
+        Page<SupplierDTO> brandDTOList = supplierService.listPage(page, userId);
+        return RespJson.createSuccess(brandDTOList);
+    }
+
+    @ApiOperation(value = "查询商品供应商列表（已实现）", notes = "查询商品供应商列表", tags = {"shop", "shop-supplier"})
+    @GetMapping("/{userId:\\d+}/supplier/no-page")
+    public RespJson list(@PathVariable("userId") Integer userId) {
+        List<SupplierDTO> brandDTOList = supplierService.list(userId);
         return RespJson.createSuccess(brandDTOList);
     }
 

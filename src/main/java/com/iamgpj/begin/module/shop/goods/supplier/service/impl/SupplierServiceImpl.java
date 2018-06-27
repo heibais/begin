@@ -24,9 +24,15 @@ import java.util.List;
 public class SupplierServiceImpl extends ServiceImpl<SupplierDAO, Supplier> implements SupplierService {
 
     @Override
-    public Page<SupplierDTO> list(Page<SupplierDTO> page, Integer userId) {
+    public Page<SupplierDTO> listPage(Page<SupplierDTO> page, Integer userId) {
         List<Supplier> supplierList = baseMapper.selectPage(page, new EntityWrapper<Supplier>().eq("user_id", userId));
         return page.setRecords(ToolUtils.mapList(supplierList, SupplierDTO.class));
+    }
+
+    @Override
+    public List<SupplierDTO> list(Integer userId) {
+        List<Supplier> supplierList = baseMapper.selectList(new EntityWrapper<Supplier>().eq("user_id", userId).eq("status", 1));
+        return ToolUtils.mapList(supplierList, SupplierDTO.class);
     }
 
     @Override
