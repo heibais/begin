@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "bg_goods_brand")
+@TableName(value = "bg_shop_brand")
 public class Brand extends SuperEntity {
 
     /** 所属用户 */

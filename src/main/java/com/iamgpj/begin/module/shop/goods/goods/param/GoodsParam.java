@@ -1,36 +1,37 @@
-package com.iamgpj.begin.module.shop.goods.goods.entity;
+package com.iamgpj.begin.module.shop.goods.goods.param;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.enums.FieldFill;
-import com.iamgpj.begin.core.biz.mybatisPlus.SuperEntity;
 import com.iamgpj.begin.core.enums.UnitEnum;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
- * @Description: 商品表
- * @author: gpj
- * @Create: 2018/6/20 23:19
+ * @Description:
+ * @author: GPJ
+ * @Create: 2018/6/28 16:59
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class Goods extends SuperEntity {
+public class GoodsParam {
 
-    /** 所属用户id */
+    private Integer id;
+    @NotNull(message = "所属用户不能为空")
     private Integer userId;
-    /** 商品分类id */
+    @NotNull(message = "商品分类不能为空")
     private Integer categoryId;
     /** 商品货号 */
     private String goodsSn;
-    /** 商品名称 */
+    @NotBlank(message = "商品名称不能为空")
     private String goodsName;
-    /** 品牌id */
+    @NotNull(message = "商品品牌不能为空")
     private Integer brandId;
-    /** 供应商id */
+    @NotNull(message = "商品供应商不能为空")
     private Integer supplierId;
     /** 商品重量 */
+    @Min(value = 0, message = "商品商量不能小于0")
     private Double goodsWeight;
     /** 商品重量单位 */
     private UnitEnum goodsWeightUnit;
@@ -41,6 +42,7 @@ public class Goods extends SuperEntity {
     /** 市场价格 */
     private Double marketPrice;
     /** 本地售价 */
+    @NotNull(message = "本地价格不能为空")
     private Double shopPrice;
     /** 是否促销 */
     private Boolean ifPromote;
@@ -58,10 +60,8 @@ public class Goods extends SuperEntity {
     private String goodsDesc;
     /** 商品主图 */
     private String goodsImg;
-    /** 商品缩略图 */
-    //private String goodsThumb;
-    /** 商品原图 */
-    //private String goodsOriginalImg;
+    /** 商品其他图片 */
+    private List<String> goodsOtherImg;
     /** 是否免运费 */
     private Integer noFreight;
     /** 是否上架 */
@@ -73,13 +73,7 @@ public class Goods extends SuperEntity {
     /** 是否精品 */
     private Integer isBest;
     /** 是否删除 */
-    private Integer ifDelete;
+    private Integer ifDelete = 0;
     /** 排序 */
     private Integer sort;
-    /** 创建时间 */
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-    /** 修改时间 */
-    @TableField(fill = FieldFill.UPDATE)
-    private LocalDateTime updateTime;
 }
