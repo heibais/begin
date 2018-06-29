@@ -6,7 +6,8 @@ package com.iamgpj.begin.core.enums;
  * @Create: 2018/6/11 22:15
  */
 public enum  RedisPrefixEnum {
-    CAPTCHA("captcha:", "验证码缓存", 300L);
+    CAPTCHA("captcha:", "验证码缓存", 300L),
+    GOODS("shop:goods:", "商品缓存", 0L);
 
 
     private String prefix;

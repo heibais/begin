@@ -23,6 +23,11 @@ public enum ExceptionEnum implements ServiceExceptionEnum {
     FILE_UPLOAD_FAIL(11, "上传文件失败"),
 
     /**
+     * 转换
+     */
+    JSON_PARSE_ERROR(21, "json解析异常"),
+
+    /**
      * 错误的请求
      */
     PARAM_ERROR(100, "参数错误"),

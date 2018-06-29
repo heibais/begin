@@ -1,12 +1,16 @@
 package com.iamgpj.begin.core.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iamgpj.begin.core.common.CommonTree;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.core.exception.enums.ExceptionEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -19,6 +23,8 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class ToolUtils {
+
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * 获取随机位数的字符串
@@ -115,6 +121,39 @@ public class ToolUtils {
                 root.setChildren(nextList);
                 format2tree(nextList, subList);
             }
+        }
+    }
+
+    /**
+     * 对象转为字符串
+     * @param object
+     * @return
+     */
+    public static String object2String(Object object) {
+        try {
+            return objectMapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            log.error("【json转换】错误 信息={}", e);
+            throw new BeginException(ExceptionEnum.JSON_PARSE_ERROR);
+        }
+    }
+
+    /**
+     * 字符串转为对象
+     * @param str
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> T string2Object(String str, Class<T> clazz) {
+        if (!StringUtils.hasText(str)) {
+            return null;
+        }
+        try {
+            return objectMapper.readValue(str, clazz);
+        } catch (IOException e) {
+            log.error("【json转换】错误 信息={}", e);
+            throw new BeginException(ExceptionEnum.JSON_PARSE_ERROR);
         }
     }
 }

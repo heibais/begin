@@ -1,23 +1,19 @@
-package com.iamgpj.begin.module.shop.goods.goods.entity;
+package com.iamgpj.begin.module.shop.goods.goods.dto;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.enums.FieldFill;
-import com.iamgpj.begin.core.biz.mybatisPlus.SuperEntity;
 import com.iamgpj.begin.core.enums.UnitEnum;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
 /**
- * @Description: 商品表
- * @author: gpj
- * @Create: 2018/6/20 23:19
+ * @Description:
+ * @author: GPJ
+ * @Create: 2018/6/29 16:42
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class Goods extends SuperEntity {
+public class GoodsDTO {
 
+    private Integer id;
     /** 所属用户id */
     private Integer userId;
     /** 商品分类id */
@@ -77,9 +73,7 @@ public class Goods extends SuperEntity {
     /** 排序 */
     private Integer sort;
     /** 创建时间 */
-    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
     /** 修改时间 */
-    @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 }
