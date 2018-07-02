@@ -1,6 +1,7 @@
 package com.iamgpj.begin.module.shop.goods.goods.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.FieldFill;
 import com.iamgpj.begin.core.biz.mybatisPlus.SuperEntity;
 import com.iamgpj.begin.core.enums.UnitEnum;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
  * @Create: 2018/6/20 23:19
  */
 @Data
+@TableName(value = "bg_shop_goods")
 @EqualsAndHashCode(callSuper = false)
 public class Goods extends SuperEntity {
 
@@ -33,7 +35,7 @@ public class Goods extends SuperEntity {
     /** 商品重量 */
     private Double goodsWeight;
     /** 商品重量单位 */
-    private UnitEnum goodsWeightUnit;
+    private Integer goodsWeightUnit;
     /** 商品数量（库存） */
     private Integer goodsNumber;
     /** 库存警告数量 */
@@ -43,7 +45,7 @@ public class Goods extends SuperEntity {
     /** 本地售价 */
     private Double shopPrice;
     /** 是否促销 */
-    private Integer ifPromote;
+    private Boolean ifPromote;
     /** 促销价格 */
     private Double promotePrice;
     /** 促销开始时间 */
@@ -51,7 +53,7 @@ public class Goods extends SuperEntity {
     /** 促销结束时间 */
     private LocalDateTime promoteEndDate;
     /** 关键字 */
-    private String keyWords;
+    private String keywords;
     /** 商品简介 */
     private String goodsBrief;
     /** 商品详情 */
@@ -63,23 +65,23 @@ public class Goods extends SuperEntity {
     /** 商品原图 */
     //private String goodsOriginalImg;
     /** 是否免运费 */
-    private Integer noFreight;
+    private Boolean noFreight;
     /** 是否上架 */
-    private Integer ifOnSale;
+    private Boolean ifOnSale;
     /** 是否新品 */
-    private Integer ifNew;
+    private Boolean ifNew;
     /** 是否热销 */
-    private Integer ifHot;
+    private Boolean ifHot;
     /** 是否精品 */
-    private Integer ifBest;
+    private Boolean ifBest;
     /** 是否删除 */
-    private Integer ifDelete;
+    private Boolean ifDelete;
     /** 排序 */
     private Integer sort;
     /** 创建时间 */
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
     /** 修改时间 */
-    @TableField(fill = FieldFill.UPDATE)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 }

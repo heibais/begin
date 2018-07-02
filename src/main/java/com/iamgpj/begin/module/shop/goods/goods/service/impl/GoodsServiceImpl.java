@@ -58,6 +58,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
     public void insert(Integer userId, GoodsParam param) {
         // 1, 获取数据
         Goods goods = ToolUtils.map(param, Goods.class);
+        goods.setGoodsWeightUnit(param.getGoodsWeightUnit().getCode());
         baseMapper.insert(goods);
         // 2、保存商品图片
         if (!CollectionUtils.isEmpty(param.getGoodsOtherImg())) {
@@ -100,12 +101,12 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
         Goods goods = findById(goodsId);
         if (goods != null && goods.getUserId().equals(userId)) {
             switch (statusEnum) {
-                case PROMOTE: goods.setIfPromote(goods.getIfPromote() * -1 + 1); break;
-                case HOT: goods.setIfHot(goods.getIfHot() * -1 + 1); break;
-                case NEW: goods.setIfNew(goods.getIfNew() * -1 + 1); break;
-                case BEST: goods.setIfBest(goods.getIfBest() * -1 + 1); break;
-                case DELETE: goods.setIfDelete(goods.getIfDelete() * -1 + 1); break;
-                case ONSALE: goods.setIfOnSale(goods.getIfOnSale() * -1 + 1); break;
+                case PROMOTE: goods.setIfPromote(!goods.getIfPromote()); break;
+                case HOT: goods.setIfHot(!goods.getIfHot()); break;
+                case NEW: goods.setIfNew(!goods.getIfNew()); break;
+                case BEST: goods.setIfBest(!goods.getIfBest()); break;
+                case DELETE: goods.setIfDelete(!goods.getIfDelete()); break;
+                case ONSALE: goods.setIfOnSale(!goods.getIfOnSale()); break;
                     default: throw new BeginException(ExceptionEnum.PARAM_ERROR);
             }
             baseMapper.updateById(goods);

@@ -15,6 +15,7 @@ public class MyMetaObjectHandler extends MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         setFieldValByName("createTime", LocalDateTime.now(), metaObject);
+        setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
     }
 
     @Override

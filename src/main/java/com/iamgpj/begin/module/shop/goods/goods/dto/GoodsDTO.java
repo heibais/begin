@@ -39,7 +39,7 @@ public class GoodsDTO {
     /** 本地售价 */
     private Double shopPrice;
     /** 是否促销 */
-    private Integer ifPromote;
+    private Boolean ifPromote;
     /** 促销价格 */
     private Double promotePrice;
     /** 促销开始时间 */
@@ -47,7 +47,7 @@ public class GoodsDTO {
     /** 促销结束时间 */
     private LocalDateTime promoteEndDate;
     /** 关键字 */
-    private String keyWords;
+    private String keywords;
     /** 商品简介 */
     private String goodsBrief;
     /** 商品详情 */
@@ -59,17 +59,17 @@ public class GoodsDTO {
     /** 商品原图 */
     //private String goodsOriginalImg;
     /** 是否免运费 */
-    private Integer noFreight;
+    private Boolean noFreight;
     /** 是否上架 */
-    private Integer ifOnSale;
+    private Boolean ifOnSale;
     /** 是否新品 */
-    private Integer ifNew;
+    private Boolean ifNew;
     /** 是否热销 */
-    private Integer ifHot;
+    private Boolean ifHot;
     /** 是否精品 */
-    private Integer ifBest;
+    private Boolean ifBest;
     /** 是否删除 */
-    private Integer ifDelete;
+    private Boolean ifDelete;
     /** 排序 */
     private Integer sort;
     /** 创建时间 */

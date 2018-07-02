@@ -36,44 +36,44 @@ public class GoodsParam {
     /** 商品重量单位 */
     private UnitEnum goodsWeightUnit;
     /** 商品数量（库存） */
-    private Integer goodsNumber;
+    private Integer goodsNumber = 0;
     /** 库存警告数量 */
-    private Integer warnNumber;
+    private Integer warnNumber = 10;
     /** 市场价格 */
-    private Double marketPrice;
+    private Double marketPrice = 0.0;
     /** 本地售价 */
     @NotNull(message = "本地价格不能为空")
     private Double shopPrice;
     /** 是否促销 */
-    private Boolean ifPromote;
+    private Boolean ifPromote = false;
     /** 促销价格 */
-    private Double promotePrice;
+    private Double promotePrice = 0.0;
     /** 促销开始时间 */
     private LocalDateTime promoteStartDate;
     /** 促销结束时间 */
     private LocalDateTime promoteEndDate;
     /** 关键字 */
-    private String keyWords;
+    private String keywords = "";
     /** 商品简介 */
-    private String goodsBrief;
+    private String goodsBrief = "";
     /** 商品详情 */
-    private String goodsDesc;
+    private String goodsDesc = "";
     /** 商品主图 */
-    private String goodsImg;
+    private String goodsImg = "";
     /** 商品其他图片 */
     private List<String> goodsOtherImg;
     /** 是否免运费 */
-    private Integer noFreight;
+    private Boolean noFreight = true;
     /** 是否上架 */
-    private Integer ifOnSale;
+    private Boolean ifOnSale = true;
     /** 是否新品 */
-    private Integer ifNew;
+    private Boolean ifNew = false;
     /** 是否热销 */
-    private Integer ifHot;
+    private Boolean ifHot = false;
     /** 是否精品 */
-    private Integer isBest;
+    private Boolean isBest = false;
     /** 是否删除 */
-    private Integer ifDelete = 0;
+    private Boolean ifDelete = false;
     /** 排序 */
-    private Integer sort;
+    private Integer sort = 99;
 }
