@@ -29,7 +29,7 @@ public class Gallery extends SuperEntity {
     /** 商品缩略图 */
     private String thumbUrl;
     /** 商品原图 */
-    private String imgOriginal;
+    private String originalUrl;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
