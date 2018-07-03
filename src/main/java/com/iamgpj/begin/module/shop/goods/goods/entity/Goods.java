@@ -3,8 +3,9 @@ package com.iamgpj.begin.module.shop.goods.goods.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.FieldFill;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iamgpj.begin.core.biz.mybatisPlus.SuperEntity;
-import com.iamgpj.begin.core.enums.UnitEnum;
+import com.iamgpj.begin.module.shop.goods.goods.enums.UnitEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -35,7 +36,7 @@ public class Goods extends SuperEntity {
     /** 商品重量 */
     private Double goodsWeight;
     /** 商品重量单位 */
-    private Integer goodsWeightUnit;
+    private UnitEnum goodsWeightUnit;
     /** 商品数量（库存） */
     private Integer goodsNumber;
     /** 库存警告数量 */
@@ -49,9 +50,9 @@ public class Goods extends SuperEntity {
     /** 促销价格 */
     private Double promotePrice;
     /** 促销开始时间 */
-    private LocalDateTime promoteStartDate;
+    private LocalDateTime promoteStartTime;
     /** 促销结束时间 */
-    private LocalDateTime promoteEndDate;
+    private LocalDateTime promoteEndTime;
     /** 关键字 */
     private String keywords;
     /** 商品简介 */

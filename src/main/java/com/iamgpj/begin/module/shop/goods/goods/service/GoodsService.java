@@ -1,6 +1,7 @@
 package com.iamgpj.begin.module.shop.goods.goods.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.IService;
 import com.iamgpj.begin.module.shop.goods.goods.dto.GoodsDTO;
 import com.iamgpj.begin.module.shop.goods.goods.entity.Goods;
 import com.iamgpj.begin.module.shop.goods.goods.enums.SomeStatusEnum;
@@ -11,7 +12,7 @@ import com.iamgpj.begin.module.shop.goods.goods.param.GoodsParam;
  * @author: GPJ
  * @Create: 2018/6/25 15:11
  */
-public interface GoodsService {
+public interface GoodsService extends IService<Goods> {
 
 
     Page<GoodsDTO> selectPage(Page<GoodsDTO> page,  Integer userId);
@@ -51,5 +52,13 @@ public interface GoodsService {
      * @param id
      */
     void delete(Integer userId, Integer id);
+
+    /**
+     * 查询分类下的商品数量
+     * @param userId
+     * @param categoryId
+     * @return
+     */
+    Integer countByCategoryId(Integer userId, Integer categoryId);
 
 }

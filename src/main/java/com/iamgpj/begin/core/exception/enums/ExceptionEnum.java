@@ -22,10 +22,18 @@ public enum ExceptionEnum implements ServiceExceptionEnum {
      */
     FILE_UPLOAD_FAIL(11, "上传文件失败"),
 
+
+
     /**
      * 转换
      */
     JSON_PARSE_ERROR(21, "json解析异常"),
+
+
+    /**
+     * 商品
+     */
+    CATEGORY_EXIST_GOODS(31, "该分类下存在商品"),
 
     /**
      * 错误的请求

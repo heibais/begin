@@ -1,6 +1,7 @@
 package com.iamgpj.begin.module.shop.goods.goods.param;
 
-import com.iamgpj.begin.core.enums.UnitEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.iamgpj.begin.module.shop.goods.goods.enums.UnitEnum;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
@@ -49,9 +50,11 @@ public class GoodsParam {
     /** 促销价格 */
     private Double promotePrice = 0.0;
     /** 促销开始时间 */
-    private LocalDateTime promoteStartDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime promoteStartTime;
     /** 促销结束时间 */
-    private LocalDateTime promoteEndDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime promoteEndTime;
     /** 关键字 */
     private String keywords = "";
     /** 商品简介 */

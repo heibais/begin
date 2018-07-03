@@ -2,6 +2,8 @@ package com.iamgpj.begin.core.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.iamgpj.begin.core.common.CommonTree;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.core.exception.enums.ExceptionEnum;
@@ -24,7 +26,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ToolUtils {
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper;
+
+    static {
+        objectMapper = new ObjectMapper();
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapper.registerModule(new JavaTimeModule());
+    }
 
     /**
      * 获取随机位数的字符串

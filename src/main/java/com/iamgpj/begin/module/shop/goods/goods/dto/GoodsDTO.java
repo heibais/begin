@@ -1,6 +1,6 @@
 package com.iamgpj.begin.module.shop.goods.goods.dto;
 
-import com.iamgpj.begin.core.enums.UnitEnum;
+import com.iamgpj.begin.module.shop.goods.goods.enums.UnitEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
  */
 @Data
 public class GoodsDTO {
+
+    private Integer key;
 
     private Integer id;
     /** 所属用户id */
@@ -43,9 +45,9 @@ public class GoodsDTO {
     /** 促销价格 */
     private Double promotePrice;
     /** 促销开始时间 */
-    private LocalDateTime promoteStartDate;
+    private LocalDateTime promoteStartTime;
     /** 促销结束时间 */
-    private LocalDateTime promoteEndDate;
+    private LocalDateTime promoteEndTime;
     /** 关键字 */
     private String keywords;
     /** 商品简介 */
@@ -76,4 +78,8 @@ public class GoodsDTO {
     private LocalDateTime createTime;
     /** 修改时间 */
     private LocalDateTime updateTime;
+
+    public Integer getKey() {
+        return this.getId();
+    }
 }

@@ -61,6 +61,7 @@ public class MybatisPlusConfig {
 
         factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mappers/*Mapper.xml"));
         factoryBean.setTypeAliasesPackage("com.iamgpj.begin.module.**.entity");
+        factoryBean.setTypeEnumsPackage("com.iamgpj.begin.module.**.enums");
 
         MybatisConfiguration configuration = new MybatisConfiguration();
 

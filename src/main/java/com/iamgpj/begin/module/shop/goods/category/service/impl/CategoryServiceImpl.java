@@ -11,7 +11,10 @@ import com.iamgpj.begin.module.shop.goods.category.dto.CategoryDTO;
 import com.iamgpj.begin.module.shop.goods.category.entity.Category;
 import com.iamgpj.begin.module.shop.goods.category.param.CategoryParam;
 import com.iamgpj.begin.module.shop.goods.category.service.CategoryService;
+import com.iamgpj.begin.module.shop.goods.goods.entity.Goods;
+import com.iamgpj.begin.module.shop.goods.goods.service.GoodsService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,6 +29,9 @@ import java.util.List;
 @Service
 @Slf4j
 public class CategoryServiceImpl extends ServiceImpl<CategoryDAO, Category> implements CategoryService {
+
+    @Autowired
+    private GoodsService goodsService;
 
     @Override
     public List<CategoryDTO> list(Integer userId) {
@@ -67,10 +73,14 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDAO, Category> impl
 
     @Override
     public void delete(Integer userId, Integer id) {
+        // 判断是否存在子栏目
         if (baseMapper.selectCount(new EntityWrapper<Category>().eq("pid", id).eq("user_id", userId)) > 0) {
             throw new BeginException(ExceptionEnum.EXIST_CHILDREN);
         }
-        // 判断是否存在子栏目
+        // 判断该栏目下是否存商品
+        if (goodsService.countByCategoryId(userId, id) > 0) {
+            throw new BeginException(ExceptionEnum.CATEGORY_EXIST_GOODS);
+        }
         baseMapper.deleteById(id);
     }
 

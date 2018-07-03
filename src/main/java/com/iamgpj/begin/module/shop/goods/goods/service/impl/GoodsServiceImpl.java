@@ -21,7 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +46,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
     public Page<GoodsDTO> selectPage(Page<GoodsDTO> page,  Integer userId) {
         // 查询条件
         EntityWrapper<Goods> wrapper = new EntityWrapper<>();
-        wrapper.eq("user_id", userId);
+        wrapper.eq("user_id", userId).eq("if_delete", 0);
         // 查询商品基本数据
         List<Goods> goodsList = baseMapper.selectPage(page, wrapper);
         List<GoodsDTO> goodsDTOS = ToolUtils.mapList(goodsList, GoodsDTO.class);
@@ -53,12 +56,39 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
         return page;
     }
 
+    /**
+     * 生成商品货号
+     * @return
+     */
+    private String mkGoodsSn(Integer userId) {
+        // 前缀
+        StringBuilder sb = new StringBuilder("LB-");
+        // 日期
+        DateTimeFormatter dtf = DateTimeFormatter.BASIC_ISO_DATE;
+        String format = dtf.format(LocalDate.now());
+        sb.append(format);
+        // 随机
+        sb.append(ToolUtils.getRandomNum(4));
+        // 判断是否存在该货号
+        Integer count = baseMapper.selectCount(new EntityWrapper<Goods>().eq("user_id", userId).eq("goods_sn", sb.toString()));
+        if (count > 0) {
+            return mkGoodsSn(userId);
+        }
+        return sb.toString();
+    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insert(Integer userId, GoodsParam param) {
         // 1, 获取数据
         Goods goods = ToolUtils.map(param, Goods.class);
-        goods.setGoodsWeightUnit(param.getGoodsWeightUnit().getCode());
+        // 2,判断是否有商品货号
+        if (StringUtils.hasText(goods.getGoodsSn())) {
+            // TODO 存在：判断是否符合格式
+        } else {
+            // 不存在，自动生成
+            goods.setGoodsSn(mkGoodsSn(userId));
+        }
         baseMapper.insert(goods);
         // 2、保存商品图片
         if (!CollectionUtils.isEmpty(param.getGoodsOtherImg())) {
@@ -66,7 +96,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
             param.getGoodsOtherImg().forEach(item -> {
                 Gallery gallery = new Gallery();
                 gallery.setUserId(userId);
-                gallery.setImgUrl(item);
+                gallery.setGoodsId(goods.getId());
+                gallery.setOriginalUrl(item);
                 galleries.add(gallery);
             });
             galleryService.insertBatch(galleries);
@@ -110,6 +141,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
                     default: throw new BeginException(ExceptionEnum.PARAM_ERROR);
             }
             baseMapper.updateById(goods);
+            // 清除缓存
+            redisUtils.remove(RedisPrefixEnum.GOODS.getPrefix() + goodsId);
         } else {
             throw new BeginException(ExceptionEnum.PARAM_ERROR);
         }
@@ -123,5 +156,13 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
         } else {
             throw new BeginException(ExceptionEnum.PARAM_ERROR);
         }
+    }
+
+    @Override
+    public Integer countByCategoryId(Integer userId, Integer categoryId) {
+        return baseMapper.selectCount(new EntityWrapper<Goods>()
+                .eq("user_id", userId)
+                .eq("category_id", categoryId));
+
     }
 }
