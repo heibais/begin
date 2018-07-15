@@ -1,9 +1,11 @@
 package com.iamgpj.begin.module.shop.goods.goods.dto;
 
+import com.iamgpj.begin.module.shop.goods.gallery.entity.Gallery;
 import com.iamgpj.begin.module.shop.goods.goods.enums.UnitEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @Description:
@@ -54,6 +56,8 @@ public class GoodsDTO {
     private String goodsBrief;
     /** 商品详情 */
     private String goodsDesc;
+    /** 商家备注 */
+    private String ownerRemark = "";
     /** 商品主图 */
     private String goodsImg;
     /** 商品缩略图 */
@@ -78,6 +82,9 @@ public class GoodsDTO {
     private LocalDateTime createTime;
     /** 修改时间 */
     private LocalDateTime updateTime;
+
+    /** 商品图册 */
+    private List<Gallery> galleryList;
 
     public Integer getKey() {
         return this.getId();

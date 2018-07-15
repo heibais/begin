@@ -59,6 +59,8 @@ public class GoodsParam {
     private String keywords = "";
     /** 商品简介 */
     private String goodsBrief = "";
+    /** 商家备注 */
+    private String ownerRemark = "";
     /** 商品详情 */
     private String goodsDesc = "";
     /** 商品主图 */
@@ -74,7 +76,7 @@ public class GoodsParam {
     /** 是否热销 */
     private Boolean ifHot = false;
     /** 是否精品 */
-    private Boolean isBest = false;
+    private Boolean ifBest = false;
     /** 是否删除 */
     private Boolean ifDelete = false;
     /** 排序 */

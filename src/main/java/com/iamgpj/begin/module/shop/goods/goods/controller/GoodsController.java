@@ -37,7 +37,7 @@ public class GoodsController {
     @ApiOperation(value = "查询商品详情（已实现）", notes = "查询商品详情", tags = {"shop", "shop-goods"})
     @GetMapping("/{userId:\\d+}/goods/{goodsId:\\d+}")
     public RespJson findOne(@PathVariable("userId") Integer userId, @PathVariable("goodsId") Integer goodsId) {
-        Goods goods = goodsService.findById(goodsId);
+        GoodsDTO goods = goodsService.findById(userId, goodsId);
         return RespJson.createSuccess(goods);
     }
 
@@ -47,7 +47,7 @@ public class GoodsController {
         if (bindingResult.hasErrors()) {
             throw new BeginException(bindingResult.getFieldError().getDefaultMessage());
         }
-        goodsService.insert(userId, param);
+        goodsService.insertOrUpdate(userId, param);
         return RespJson.createSuccess("操作成功");
     }
 

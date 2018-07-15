@@ -59,6 +59,8 @@ public class Goods extends SuperEntity {
     private String goodsBrief;
     /** 商品详情 */
     private String goodsDesc;
+    /** 商家备注 */
+    private String ownerRemark = "";
     /** 商品主图 */
     private String goodsImg;
     /** 商品缩略图 */

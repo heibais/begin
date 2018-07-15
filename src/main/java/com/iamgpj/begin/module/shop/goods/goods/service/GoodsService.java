@@ -22,14 +22,8 @@ public interface GoodsService extends IService<Goods> {
      * @param userId
      * @param param
      */
-    void insert(Integer userId, GoodsParam param);
+    void insertOrUpdate(Integer userId, GoodsParam param);
 
-    /**
-     * 编辑商品
-     * @param userId
-     * @param param
-     */
-    void update(Integer userId, GoodsParam param);
 
     /**
      * 查询商品
@@ -37,6 +31,14 @@ public interface GoodsService extends IService<Goods> {
      * @return
      */
     Goods findById(Integer goodsId);
+
+    /**
+     * 查询商品 包括商品其他相关信息
+     * @param userId
+     * @param goodsId
+     * @return
+     */
+    GoodsDTO findById(Integer userId, Integer goodsId);
 
     /**
      * 改变字段状态

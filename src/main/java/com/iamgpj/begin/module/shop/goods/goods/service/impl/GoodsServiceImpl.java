@@ -79,7 +79,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insert(Integer userId, GoodsParam param) {
+    public void insertOrUpdate(Integer userId, GoodsParam param) {
         // 1, 获取数据
         Goods goods = ToolUtils.map(param, Goods.class);
         // 2,判断是否有商品货号
@@ -89,7 +89,18 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
             // 不存在，自动生成
             goods.setGoodsSn(mkGoodsSn(userId));
         }
-        baseMapper.insert(goods);
+        if (param.getId() == null) {
+            // 新增
+            baseMapper.insert(goods);
+        } else {
+            // 编辑
+            baseMapper.updateById(goods);
+            // 删除所有商品图册
+            galleryService.deleteByGoodsId(param.getId());
+            // 清除缓存
+            String goodsKey = RedisPrefixEnum.GOODS.getPrefix() + param.getId();
+            redisUtils.remove(goodsKey, goodsKey + ":desc");
+        }
         // 2、保存商品图片
         if (!CollectionUtils.isEmpty(param.getGoodsOtherImg())) {
             List<Gallery> galleries = new ArrayList<>(param.getGoodsOtherImg().size());
@@ -104,12 +115,6 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
         }
     }
 
-
-
-    @Override
-    public void update(Integer userId, GoodsParam param) {
-
-    }
 
     @Override
     public Goods findById(Integer goodsId) {
@@ -128,6 +133,31 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
     }
 
     @Override
+    public GoodsDTO findById(Integer userId, Integer goodsId) {
+        // 查询缓存
+        String key = RedisPrefixEnum.GOODS.getPrefix() + goodsId + ":desc";
+        String goodsDtoStr = redisUtils.get(key);
+
+        if (goodsDtoStr == null) {
+            // 1 查询商品
+            Goods goods = this.findById(goodsId);
+            // 2 检查参数
+            if (!goods.getUserId().equals(userId)) {
+                throw new BeginException(ExceptionEnum.PARAM_ERROR);
+            }
+            GoodsDTO goodsDTO = ToolUtils.map(goods, GoodsDTO.class);
+            // 3 查询商品图册
+            goodsDTO.setGalleryList(galleryService.findByGoodsId(goodsId));
+            // 存入缓存
+            goodsDtoStr = ToolUtils.object2String(goodsDTO);
+            redisUtils.set(key, goodsDtoStr);
+            return goodsDTO;
+        } else {
+            return ToolUtils.string2Object(goodsDtoStr, GoodsDTO.class);
+        }
+    }
+
+    @Override
     public void changeSomeStatus(Integer userId, Integer goodsId, SomeStatusEnum statusEnum) {
         Goods goods = findById(goodsId);
         if (goods != null && goods.getUserId().equals(userId)) {
@@ -142,17 +172,21 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
             }
             baseMapper.updateById(goods);
             // 清除缓存
-            redisUtils.remove(RedisPrefixEnum.GOODS.getPrefix() + goodsId);
+            String goodsKey = RedisPrefixEnum.GOODS.getPrefix() + goodsId;
+            redisUtils.remove(goodsKey, goodsKey + ":desc");
         } else {
             throw new BeginException(ExceptionEnum.PARAM_ERROR);
         }
     }
 
     @Override
-    public void delete(Integer userId, Integer id) {
-        Goods goods = findById(id);
+    public void delete(Integer userId, Integer goodsId) {
+        Goods goods = findById(goodsId);
         if (goods != null && goods.getUserId().equals(userId)) {
-            baseMapper.deleteById(id);
+            baseMapper.deleteById(goodsId);
+            // 清除缓存
+            String goodsKey = RedisPrefixEnum.GOODS.getPrefix() + goodsId;
+            redisUtils.remove(goodsKey, goodsKey + ":desc");
         } else {
             throw new BeginException(ExceptionEnum.PARAM_ERROR);
         }
