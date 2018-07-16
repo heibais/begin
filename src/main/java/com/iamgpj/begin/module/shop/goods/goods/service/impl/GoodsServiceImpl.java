@@ -87,15 +87,15 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
      */
     private String mkGoodsSn(Integer userId) {
         // 前缀
-        StringBuilder sb = new StringBuilder("LB-");
+        StringBuilder sb = new StringBuilder("CSQX-");
         // 日期
         DateTimeFormatter dtf = DateTimeFormatter.BASIC_ISO_DATE;
         String format = dtf.format(LocalDate.now());
         sb.append(format);
         // 随机
-        sb.append(ToolUtils.getRandomNum(4));
+        sb.append(ToolUtils.getRandomNum(8));
         // 判断是否存在该货号
-        Integer count = baseMapper.selectCount(new EntityWrapper<Goods>().eq("user_id", userId).eq("goods_sn", sb.toString()));
+        Integer count = baseMapper.selectCount(new EntityWrapper<Goods>().eq("goods_sn", sb.toString()));
         if (count > 0) {
             return mkGoodsSn(userId);
         }
