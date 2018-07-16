@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import com.iamgpj.begin.module.shop.goods.goods.dto.GoodsDTO;
 import com.iamgpj.begin.module.shop.goods.goods.dto.GoodsSearchDTO;
+import com.iamgpj.begin.module.shop.goods.goods.dto.GoodsTrashDTO;
 import com.iamgpj.begin.module.shop.goods.goods.entity.Goods;
 import com.iamgpj.begin.module.shop.goods.goods.enums.SomeStatusEnum;
 import com.iamgpj.begin.module.shop.goods.goods.param.GoodsParam;
@@ -24,6 +25,14 @@ public interface GoodsService extends IService<Goods> {
      * @return
      */
     Page<GoodsDTO> selectPage(Page<GoodsDTO> page,  Integer userId, GoodsSearchDTO searchDTO);
+
+    /**
+     * 查询回收站的商品
+     * @param page
+     * @param userId
+     * @return
+     */
+    Page<GoodsTrashDTO> selectTrashPage(Page<GoodsTrashDTO> page, Integer userId, String goodsName);
 
     /**
      * 新增商品

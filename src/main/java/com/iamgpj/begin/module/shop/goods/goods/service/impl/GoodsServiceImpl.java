@@ -1,6 +1,7 @@
 package com.iamgpj.begin.module.shop.goods.goods.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.iamgpj.begin.core.enums.RedisPrefixEnum;
@@ -13,6 +14,7 @@ import com.iamgpj.begin.module.shop.goods.gallery.service.GalleryService;
 import com.iamgpj.begin.module.shop.goods.goods.dao.GoodsDAO;
 import com.iamgpj.begin.module.shop.goods.goods.dto.GoodsDTO;
 import com.iamgpj.begin.module.shop.goods.goods.dto.GoodsSearchDTO;
+import com.iamgpj.begin.module.shop.goods.goods.dto.GoodsTrashDTO;
 import com.iamgpj.begin.module.shop.goods.goods.entity.Goods;
 import com.iamgpj.begin.module.shop.goods.goods.enums.SomeStatusEnum;
 import com.iamgpj.begin.module.shop.goods.goods.param.GoodsParam;
@@ -77,6 +79,22 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
         List<GoodsDTO> goodsDTOS = ToolUtils.mapList(goodsList, GoodsDTO.class);
         // 查询其他额外数据
 
+        page.setRecords(goodsDTOS);
+        return page;
+    }
+
+    @Override
+    public Page<GoodsTrashDTO> selectTrashPage(Page<GoodsTrashDTO> page, Integer userId, String goodsName) {
+        Wrapper<Goods> wrapper = new EntityWrapper<Goods>()
+                                    .setSqlSelect("id", "goods_name", "goods_sn", "shop_price")
+                                    .eq("user_id", userId)
+                                    .eq("if_delete", 1);
+        if (StringUtils.hasText(goodsName)) {
+            wrapper.like("goods_name", goodsName);
+        }
+        // 查询商品基本数据
+        List<Goods> goodsList = baseMapper.selectPage(page, wrapper);
+        List<GoodsTrashDTO> goodsDTOS = ToolUtils.mapList(goodsList, GoodsTrashDTO.class);
         page.setRecords(goodsDTOS);
         return page;
     }

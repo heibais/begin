@@ -5,6 +5,7 @@ import com.iamgpj.begin.core.common.RespJson;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.module.shop.goods.goods.dto.GoodsDTO;
 import com.iamgpj.begin.module.shop.goods.goods.dto.GoodsSearchDTO;
+import com.iamgpj.begin.module.shop.goods.goods.dto.GoodsTrashDTO;
 import com.iamgpj.begin.module.shop.goods.goods.entity.Goods;
 import com.iamgpj.begin.module.shop.goods.goods.enums.SomeStatusEnum;
 import com.iamgpj.begin.module.shop.goods.goods.param.GoodsParam;
@@ -34,6 +35,15 @@ public class GoodsController {
                              @PathVariable("userId") Integer userId,
                              GoodsSearchDTO searchDTO) {
         Page<GoodsDTO> goodsDTOList = goodsService.selectPage(page, userId, searchDTO);
+        return RespJson.createSuccess(goodsDTOList);
+    }
+
+    @ApiOperation(value = "查询回收站商品分页列表（已实现）", notes = "查询回收站商品分页列表", tags = {"shop", "shop-goods"})
+    @GetMapping("/{userId:\\d+}/goods/trash")
+    public RespJson listTrashPage(@PageableDefault Page<GoodsTrashDTO> page,
+                                  @PathVariable("userId") Integer userId,
+                                  @RequestParam(required = false) String goodsName) {
+        Page<GoodsTrashDTO> goodsDTOList = goodsService.selectTrashPage(page, userId, goodsName);
         return RespJson.createSuccess(goodsDTOList);
     }
 
