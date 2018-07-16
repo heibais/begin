@@ -6,11 +6,13 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.core.exception.enums.ExceptionEnum;
 import com.iamgpj.begin.core.util.ToolUtils;
+import com.iamgpj.begin.module.shop.goods.goods.service.GoodsService;
 import com.iamgpj.begin.module.shop.goods.supplier.dao.SupplierDAO;
 import com.iamgpj.begin.module.shop.goods.supplier.dto.SupplierDTO;
 import com.iamgpj.begin.module.shop.goods.supplier.entity.Supplier;
 import com.iamgpj.begin.module.shop.goods.supplier.param.SupplierParam;
 import com.iamgpj.begin.module.shop.goods.supplier.service.SupplierService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,9 @@ import java.util.List;
  */
 @Service
 public class SupplierServiceImpl extends ServiceImpl<SupplierDAO, Supplier> implements SupplierService {
+
+    @Autowired
+    private GoodsService goodsService;
 
     @Override
     public Page<SupplierDTO> listPage(Page<SupplierDTO> page, Integer userId) {
@@ -51,6 +56,10 @@ public class SupplierServiceImpl extends ServiceImpl<SupplierDAO, Supplier> impl
         Supplier supplier = baseMapper.selectById(supplierId);
         if (supplier == null && !supplier.getUserId().equals(userId)) {
             throw new BeginException(ExceptionEnum.PARAM_ERROR);
+        }
+        // 判断该供应商下是否存在商品
+        if (goodsService.countBySupplierId(userId, supplierId) > 0) {
+            throw new BeginException(ExceptionEnum.SUPPLIER_EXIST_GOODS);
         }
         baseMapper.deleteById(supplierId);
     }

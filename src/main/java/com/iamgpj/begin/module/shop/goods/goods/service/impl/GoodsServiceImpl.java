@@ -8,11 +8,11 @@ import com.iamgpj.begin.core.exception.BeginException;
 import com.iamgpj.begin.core.exception.enums.ExceptionEnum;
 import com.iamgpj.begin.core.util.RedisUtils;
 import com.iamgpj.begin.core.util.ToolUtils;
-import com.iamgpj.begin.module.shop.goods.brand.dto.BrandDTO;
 import com.iamgpj.begin.module.shop.goods.gallery.entity.Gallery;
 import com.iamgpj.begin.module.shop.goods.gallery.service.GalleryService;
 import com.iamgpj.begin.module.shop.goods.goods.dao.GoodsDAO;
 import com.iamgpj.begin.module.shop.goods.goods.dto.GoodsDTO;
+import com.iamgpj.begin.module.shop.goods.goods.dto.GoodsSearchDTO;
 import com.iamgpj.begin.module.shop.goods.goods.entity.Goods;
 import com.iamgpj.begin.module.shop.goods.goods.enums.SomeStatusEnum;
 import com.iamgpj.begin.module.shop.goods.goods.param.GoodsParam;
@@ -43,10 +43,35 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
 
 
     @Override
-    public Page<GoodsDTO> selectPage(Page<GoodsDTO> page,  Integer userId) {
+    public Page<GoodsDTO> selectPage(Page<GoodsDTO> page,  Integer userId, GoodsSearchDTO searchDTO) {
         // 查询条件
         EntityWrapper<Goods> wrapper = new EntityWrapper<>();
         wrapper.eq("user_id", userId).eq("if_delete", 0);
+        if (searchDTO != null) {
+            if (searchDTO.getCategoryId() != null) {
+                wrapper.eq("category_id", searchDTO.getCategoryId());
+            }
+            if (searchDTO.getBrandId() != null) {
+                wrapper.eq("brand_id", searchDTO.getBrandId());
+            }
+            if (searchDTO.getSupplierId() != null) {
+                wrapper.eq("supplier_id", searchDTO.getSupplierId());
+            }
+            if (searchDTO.getIfOnSale() != null) {
+                wrapper.eq("if_on_sale", searchDTO.getIfOnSale());
+            }
+            if (StringUtils.hasText(searchDTO.getGoodsName())) {
+                wrapper.like("goods_name", searchDTO.getGoodsName());
+            }
+            if (searchDTO.getRecommend() != null) {
+                switch (searchDTO.getRecommend()) {
+                    case BEST: wrapper.eq("if_best", true); break;
+                    case NEW: wrapper.eq("if_new", true); break;
+                    case HOT: wrapper.eq("if_hot", true); break;
+                    default:
+                }
+            }
+        }
         // 查询商品基本数据
         List<Goods> goodsList = baseMapper.selectPage(page, wrapper);
         List<GoodsDTO> goodsDTOS = ToolUtils.mapList(goodsList, GoodsDTO.class);
@@ -198,5 +223,19 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDAO, Goods> implements Go
                 .eq("user_id", userId)
                 .eq("category_id", categoryId));
 
+    }
+
+    @Override
+    public Integer countByBrandId(Integer userId, Integer brandId) {
+        return baseMapper.selectCount(new EntityWrapper<Goods>()
+                .eq("user_id", userId)
+                .eq("brand_id", brandId));
+    }
+
+    @Override
+    public Integer countBySupplierId(Integer userId, Integer supplierId) {
+        return baseMapper.selectCount(new EntityWrapper<Goods>()
+                .eq("user_id", userId)
+                .eq("supplier_id", supplierId));
     }
 }

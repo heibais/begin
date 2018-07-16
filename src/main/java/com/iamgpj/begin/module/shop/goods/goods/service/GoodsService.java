@@ -3,6 +3,7 @@ package com.iamgpj.begin.module.shop.goods.goods.service;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import com.iamgpj.begin.module.shop.goods.goods.dto.GoodsDTO;
+import com.iamgpj.begin.module.shop.goods.goods.dto.GoodsSearchDTO;
 import com.iamgpj.begin.module.shop.goods.goods.entity.Goods;
 import com.iamgpj.begin.module.shop.goods.goods.enums.SomeStatusEnum;
 import com.iamgpj.begin.module.shop.goods.goods.param.GoodsParam;
@@ -15,7 +16,14 @@ import com.iamgpj.begin.module.shop.goods.goods.param.GoodsParam;
 public interface GoodsService extends IService<Goods> {
 
 
-    Page<GoodsDTO> selectPage(Page<GoodsDTO> page,  Integer userId);
+    /**
+     * 分页查询
+     * @param page
+     * @param userId
+     * @param searchDTO
+     * @return
+     */
+    Page<GoodsDTO> selectPage(Page<GoodsDTO> page,  Integer userId, GoodsSearchDTO searchDTO);
 
     /**
      * 新增商品
@@ -63,4 +71,19 @@ public interface GoodsService extends IService<Goods> {
      */
     Integer countByCategoryId(Integer userId, Integer categoryId);
 
+    /**
+     * 查询品牌下的商品数量
+     * @param userId
+     * @param brandId
+     * @return
+     */
+    Integer countByBrandId(Integer userId, Integer brandId);
+
+    /**
+     * 查询供应商下的商品数量
+     * @param userId
+     * @param supplierId
+     * @return
+     */
+    Integer countBySupplierId(Integer userId, Integer supplierId);
 }

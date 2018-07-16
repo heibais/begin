@@ -1,5 +1,8 @@
 package com.iamgpj.begin.core.biz.mybatisPlus;
 
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableLogic;
+import com.baomidou.mybatisplus.enums.FieldFill;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
@@ -24,7 +27,15 @@ public class SuperEntity implements Serializable {
     /**
      * 是否删除
      */
-    /*@TableLogic
+    @TableLogic
     @TableField(fill = FieldFill.INSERT)
-    protected Boolean deleted;*/
+    private Boolean deleted;
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
 }

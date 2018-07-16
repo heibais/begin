@@ -11,6 +11,8 @@ import com.iamgpj.begin.module.shop.goods.brand.dto.BrandDTO;
 import com.iamgpj.begin.module.shop.goods.brand.entity.Brand;
 import com.iamgpj.begin.module.shop.goods.brand.param.BrandParam;
 import com.iamgpj.begin.module.shop.goods.brand.service.BrandService;
+import com.iamgpj.begin.module.shop.goods.goods.service.GoodsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,6 +25,9 @@ import java.util.List;
  */
 @Service
 public class BrandServiceImpl extends ServiceImpl<BrandDao, Brand> implements BrandService {
+
+    @Autowired
+    private GoodsService goodsService;
 
     @Override
     public Page<BrandDTO> listPage(Page<BrandDTO> page, Integer userId) {
@@ -53,6 +58,10 @@ public class BrandServiceImpl extends ServiceImpl<BrandDao, Brand> implements Br
         Brand brand = baseMapper.selectById(brandId);
         if (brand == null || !brand.getUserId().equals(userId)) {
             throw new BeginException(ExceptionEnum.PARAM_ERROR);
+        }
+        // 判断该品牌下是否存在商品
+        if (goodsService.countByBrandId(userId, brandId) > 0) {
+            throw new BeginException(ExceptionEnum.BRAND_EXIST_GOODS);
         }
         baseMapper.deleteById(brandId);
     }

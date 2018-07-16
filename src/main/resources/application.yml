@@ -11,9 +11,6 @@ spring:
     url: jdbc:mysql://59.110.142.126/mybegin?characterEncoding=utf-8&useSSL=false
     username: root
     password: Iamgpj1996.mysql
-  ## spring data jpa
-  jpa:
-      show-sql: true
 
   ## 163 email
   mail:

@@ -34,6 +34,8 @@ public enum ExceptionEnum implements ServiceExceptionEnum {
      * 商品
      */
     CATEGORY_EXIST_GOODS(31, "该分类下存在商品"),
+    BRAND_EXIST_GOODS(32, "该品牌下存在商品"),
+    SUPPLIER_EXIST_GOODS(33, "该供应商下存在商品"),
 
     /**
      * 错误的请求

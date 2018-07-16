@@ -87,15 +87,15 @@ public class MybatisPlusConfig {
         GlobalConfiguration conf = new GlobalConfiguration();
         //  主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
         conf.setIdType(0);
-        // 字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+        // 字段策略 0:"忽略判断",1:"非 NULL 判断",2:"非空判断"
         conf.setFieldStrategy(2);
         // 驼峰下划线转换
         conf.setDbColumnUnderline(true);
         // 刷新mapper 调试神器
         conf.setRefresh(true);
         // 逻辑删除配置
-        /*conf.setLogicDeleteValue("true");
-        conf.setLogicNotDeleteValue("false");*/
+        conf.setLogicDeleteValue("true");
+        conf.setLogicNotDeleteValue("false");
         // 自定义sql注入器
         conf.setSqlInjector(new LogicSqlInjector());
         // 自定义填充策略接口实现
